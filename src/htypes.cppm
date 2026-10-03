@@ -1,0 +1,34 @@
+export module htypes;
+
+//export import :alloc_func;
+//export import :allocator;
+//export import :allocatorfunc;
+
+export import :algoutils;
+export import :array;
+export import :bdictionary;
+export import :btypes;
+export import :bstr;
+export import :cast;
+export import :dictionary;
+export import :function;
+export import :growpolicy;
+export import :hash_table;
+export import :hash;
+export import :lockable_vector;
+export import :menum;
+export import :pair;
+export import :pimplp;
+export import :raw_memory;
+export import :shared_ptr;
+export import :span;
+export import :stack;
+export import :str_functions;
+export import :str_literal;
+export import :str_view;
+export import :str;
+export import :unique_ptr;
+export import :vector_base;
+export import :vector_storage;
+export import :vector;
+export import :weak_ptr;

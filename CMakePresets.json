@@ -1,0 +1,158 @@
+{
+    "version": 6,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 23,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "default",
+            "displayName": "default",
+            "description": "default",
+            "hidden": true,
+            "binaryDir": "${sourceDir}/preset_build/${presetName}",
+            "installDir": "${sourceDir}/preset_build/intall/${presetName}"
+        },
+        {
+            "name": "win_vs_2022_x64",
+            "displayName": "Visual Studio 17 x64 2022 Windows",
+            "description": "Preset Visual Studio 17 x64 2022 Windows using Visual Studio Generator on Windows",
+            "inherits": "default",
+            "generator": "Visual Studio 17 2022"
+        },
+        {
+            "name": "win_vs_2026_x64",
+            "displayName": "Visual Studio 18 x64 2026 Windows",
+            "description": "Preset Visual Studio 18 x64 2026 Windows using Visual Studio Generator on Windows",
+            "inherits": "default",
+            "generator": "Visual Studio 18 2026"
+        },
+        {
+            "name": "win_msvc_ninja_multi",
+            "generator": "Ninja Multi-Config",
+            "inherits": "default",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "cl.exe",
+                "CMAKE_CXX_COMPILER": "cl.exe"
+            }
+        },
+        {
+            "name": "win_msvc17_ninja_multi",
+            "displayName": "Ninja with MSVC 17 2022 Windows",
+            "description": "Preset Visual Studio 17 2022 Windows using Ninja generator with MSVC compiler on Windows",
+            "hidden": true,
+            "inherits": "win_msvc_ninja_multi"
+        },
+        {
+            "name": "win_msvc18_ninja_multi",
+            "displayName": "Ninja with MSVC 18 2026 Windows",
+            "description": "Preset Visual Studio 18 2026 Windows using Ninja generator with MSVC compiler on Windows",
+            "hidden": true,
+            "inherits": "win_msvc_ninja_multi"
+        },
+        {
+            "name": "win_msvc17_x64_ninja_multi",
+            "displayName": "Ninja with MSVC 17 x64 2022 Windows",
+            "description": "Preset Visual Studio 17 x64 2022 Windows using Ninja generator with MSVC compiler on Windows",
+            "inherits": "win_msvc17_ninja_multi",
+            "architecture": {
+                "value": "x64",
+                "strategy": "external"
+            },
+            "toolset": {
+                "value": "host=x64",
+                "strategy": "external"
+            }
+        },
+        {
+            "name": "win_msvc18_x64_ninja_multi",
+            "displayName": "Ninja with MSVC 18 x64 2026 Windows",
+            "description": "Preset Visual Studio 17 x64 2026 Windows using Ninja generator with MSVC compiler on Windows",
+            "inherits": "win_msvc18_ninja_multi",
+            "architecture": {
+                "value": "x64",
+                "strategy": "external"
+            },
+            "toolset": {
+                "value": "host=x64",
+                "strategy": "external"
+            }
+        },
+        {
+            "name": "linux-gcc",
+            "displayName": "GCC 13.2.0 x86_64-linux-gnu",
+            "description": "Using compilers: C = /usr/bin/gcc, CXX = /usr/bin/g++",
+            "binaryDir": "${sourceDir}/out/build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/${presetName}",
+                "CMAKE_C_COMPILER": "/usr/bin/gcc",
+                "CMAKE_CXX_COMPILER": "/usr/bin/g++",
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "win_vs_2022_x64_debug",
+            "description": "Build for Windows x64 in Debug configuration using Visual Studio 2022",
+            "displayName": "Windows VS 2022 x64 debug",
+            "configurePreset": "win_vs_2022_x64",
+            "configuration": "Debug"
+        },
+        {
+            "name": "win_vs_2022_x64_release",
+            "description": "Build for Windows x64 in Release configuration using Visual Studio 2022",
+            "displayName": "Windows VS 2022 x64 release",
+            "configurePreset": "win_vs_2022_x64",
+            "configuration": "Release"
+        },
+        {
+            "name": "win_vs_2026_x64_debug",
+            "description": "Build for Windows x64 in Debug configuration using Visual Studio 2026",
+            "displayName": "Windows VS 2026 x64 debug",
+            "configurePreset": "win_vs_2026_x64",
+            "configuration": "Debug"
+        },
+        {
+            "name": "win_vs_2026_x64_release",
+            "description": "Build for Windows x64 in Release configuration using Visual Studio 2026",
+            "displayName": "Windows VS 2026 x64 release",
+            "configurePreset": "win_vs_2026_x64",
+            "configuration": "Release"
+        },
+        {
+            "name": "win_msvc17_x64_ninja_multi_debug",
+            "description": "Build for Windows x64 in Debug configuration using Ninja with Visual Studio 2022",
+            "displayName": "Windows Ninja VS 2022 x64 debug",
+            "configurePreset": "win_msvc17_x64_ninja_multi",
+            "inheritConfigureEnvironment": true,
+            "configuration": "Debug"
+        },
+        {
+            "name": "win_msvc17_x64_ninja_multi_release",
+            "description": "Build for Windows x64 in Release configuration using Ninja with Visual Studio 2022",
+            "displayName": "Windows Ninja VS 2022 x64 release",
+            "configurePreset": "win_msvc17_x64_ninja_multi",
+            "inheritConfigureEnvironment": true,
+            "configuration": "Release"
+        },
+                {
+            "name": "win_msvc18_x64_ninja_multi_debug",
+            "description": "Build for Windows x64 in Debug configuration using Ninja with Visual Studio 2026",
+            "displayName": "Windows Ninja VS 2026 x64 debug",
+            "configurePreset": "win_msvc18_x64_ninja_multi",
+            "inheritConfigureEnvironment": true,
+            "configuration": "Debug"
+        },
+        {
+            "name": "win_msvc18_x64_ninja_multi_release",
+            "description": "Build for Windows x64 in Release configuration using Ninja with Visual Studio 2026",
+            "displayName": "Windows Ninja VS 2026 x64 release",
+            "configurePreset": "win_msvc18_x64_ninja_multi",
+            "inheritConfigureEnvironment": true,
+            "configuration": "Release"
+        }
+    ]
+}
