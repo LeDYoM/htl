@@ -1,3 +1,6 @@
+#pragma warning(push)
+#pragma warning(disable : 4868)
+
 #include "catch_include.hpp"
 
 import htypes;
@@ -463,3 +466,5 @@ TEST_CASE("htps::strnfind", "[str][str_functions]")
         static_assert(htps::strnfind("", " ") == htps::npos);
     }
 }
+
+#pragma warning(pop)

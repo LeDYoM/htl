@@ -27,6 +27,4 @@ set(SOURCE_TESTS
 )
 
 add_test_executable(${target} SOURCE_TESTS ${SOURCE_TESTS})
-set_my_standards_cxx_options(${target} 23)
-
-target_link_libraries(${target} PRIVATE htypes)
+target_link_libraries(${target} PRIVATE htl)

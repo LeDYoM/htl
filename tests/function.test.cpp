@@ -14,27 +14,15 @@ struct TestObject
 struct ConstTestObject
 {
     s32 add2(s32 const n) const { return n + 2; }
-
-    s32 add3(s32 const n) const { return n + 3; }
 };
 
 struct ModifableTestObject
 {
     s32 add2(s32 const n) const { return n + 2; }
 
-    s32 add3(s32 const n) const { return n + 3; }
-
-    s32 add2M(s32 const) const { return data + 2; }
-
     s32 add2M(s32 const n)
     {
         data = n + 2;
-        return data;
-    }
-
-    s32 add3M(s32 const n)
-    {
-        data = n + 3;
         return data;
     }
 
@@ -164,13 +152,22 @@ TEST_CASE("make_function", "[function]")
     TestObject b_obj;
     const ConstTestObject c_obj;
 
-    //    function<s32(s32 const)> const c =
-    //        function<s32(s32 const)>(&c_obj, &ConstTestObject::add2);
+    function<s32(s32 const)> const c =
+        function<s32(s32 const)>(&c_obj, &ConstTestObject::add2);
 
-    //    auto c =
-    //        function<s32(s32 const)>(&c_obj, &ConstTestObject::add2);
+    auto c3 = make_function(&c_obj, &ConstTestObject::add2);
 
-    auto c = make_function(&c_obj, &ConstTestObject::add2);
+    {
+        auto c1 = function<s32(s32 const)>(&c_obj, &ConstTestObject::add2);
+        auto c2 = make_function(&c_obj, &ConstTestObject::add2);
+
+        CHECK(c != c1);
+        CHECK(c1 != c2);
+        CHECK(c.equals(c1));
+        CHECK(c1.equals(c2));
+        auto a = make_function(&a_obj, &TestObject::add2);
+        CHECK_FALSE(c2 == a);
+    }
 
     {
         auto a = make_function(&a_obj, &TestObject::add2);
@@ -178,8 +175,9 @@ TEST_CASE("make_function", "[function]")
 
         CHECK_FALSE(a == b);
         CHECK_FALSE(a.equals(b));
-        CHECK_FALSE(a == c);
+        CHECK_FALSE(a == c3);
         CHECK_FALSE(a.equals(c));
+        CHECK_FALSE(a.equals(c3));
         CHECK(a(5) == 7);
         CHECK(b(50) == 52);
         CHECK(c(1) == 3);

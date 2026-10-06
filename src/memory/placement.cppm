@@ -6,9 +6,11 @@ module;
 module htypes:placement;
 import :btypes;
 
+#pragma warning(push)
+#pragma warning(disable : 4365)
+
 namespace htps
 {
-
 /**
  * @brief Class dedicated to the construction and destruction
  * of objects. You pass the pointer to the allocated memory or
@@ -51,3 +53,5 @@ public:
 };
 
 }  // namespace htps
+
+#pragma warning(pop)

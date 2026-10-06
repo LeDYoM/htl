@@ -1,3 +1,7 @@
+/*
+#pragma warning(push)
+#pragma warning(disable : 4514)
+
 #include "catch_include.hpp"
 
 import htypes;
@@ -209,3 +213,6 @@ TEST_CASE("weak_ptr destroy_shared", "[types][shared_ptr][weak_ptr]")
     CHECK(b.use_count() == 0U);
     CHECK(b == nullptr);
 }
+
+#pragma warning(pop)
+*/

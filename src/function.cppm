@@ -6,6 +6,9 @@ export module htypes:function;
 
 import :shared_ptr;
 
+#pragma warning(push)
+#pragma warning(disable : 4626 5027 4820)
+
 namespace htps
 {
 /**
@@ -261,3 +264,5 @@ constexpr auto make_function(T const* obj, ReturnType (T::*p)(Args...) const)
 }
 
 }  // namespace htps
+
+#pragma warning(pop)

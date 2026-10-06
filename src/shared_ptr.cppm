@@ -4,6 +4,9 @@ import :btypes;
 import :unique_ptr;
 import :allocator;
 
+#pragma warning(push)
+#pragma warning(disable : 4514)  // Unused functions in MSVC
+
 namespace htps
 {
 namespace shptr_detail
@@ -54,6 +57,11 @@ private:
     fast_u32 m_counter{1U};
     fast_u32 m_weak_counter{0U};
 };
+
+#pragma warning(pop)
+
+#pragma warning(push)
+#pragma warning(disable : 4625 4626)
 
 template <typename T>
 struct ManagedPointer final : public counter
@@ -366,3 +374,5 @@ export template <class T, class T2>
 }
 
 }  // namespace htps
+
+#pragma warning(pop)

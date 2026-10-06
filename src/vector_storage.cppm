@@ -9,6 +9,9 @@ import :allocator;
 import :function;
 import :growpolicy;
 
+#pragma warning(push)
+#pragma warning(disable : 5045)
+
 namespace htps
 {
 /** Vector class to store a sequence of elements
@@ -236,3 +239,5 @@ public:
 };
 
 }  // namespace htps
+
+#pragma warning(pop)
