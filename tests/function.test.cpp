@@ -40,7 +40,7 @@ TEST_CASE("function::function", "[function]")
     SECTION("With lambda")
     {
         function<s32(s32 const)> b = [](s32 const n) { return n + 1; };
-        CHECK(b);
+        CHECK(b != nullptr);
 
         CHECK(4 == b(3));
     }

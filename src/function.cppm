@@ -6,9 +6,6 @@ export module htypes:function;
 
 import :shared_ptr;
 
-#pragma warning(push)
-#pragma warning(disable : 4626 5027 4820)
-
 namespace htps
 {
 /**
@@ -146,6 +143,13 @@ private:
             return tmp ? equals(*tmp) : false;
         }
 
+        constexpr CallableT(CallableT&& c) noexcept : t_{htps::move(c)} {}
+        constexpr CallableT& operator=(CallableT&& c) noexcept
+        {
+            t_ = htps::move(c);
+            return *this;
+        }
+
     private:
         T t_;
     };
@@ -264,5 +268,3 @@ constexpr auto make_function(T const* obj, ReturnType (T::*p)(Args...) const)
 }
 
 }  // namespace htps
-
-#pragma warning(pop)

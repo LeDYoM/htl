@@ -4,6 +4,7 @@ module;
 #include <cassert>
 #include <iterator>
 #include <cstddef>
+#include <concepts>
 
 export module htypes:array;
 
@@ -12,12 +13,12 @@ import :span;
 import :weak_ptr;
 
 #pragma warning(push)
-#pragma warning(disable : 4625 4626 4514 5045)
+#pragma warning(disable : 4626 4514 5045)
 
 namespace htps
 {
 export template <class T, size_t array_size>
-class array
+class array final
 {
 public:
     using iterator         = T*;
@@ -28,10 +29,9 @@ public:
     using value_type       = T;
     using const_value_type = const T;
 
-    [[nodiscard]] array() = default;
+    constexpr array() = default;
 
-    [[nodiscard]] constexpr array(
-        std::initializer_list<value_type> iList) noexcept
+    constexpr array(std::initializer_list<value_type> iList) noexcept
     {
         //        static_assert(iList.size() <= array_size);
         auto buffer_element{&buffer_[0]};
@@ -52,9 +52,7 @@ public:
         }
     }
 
-    [[nodiscard]] constexpr array(const T* const source,
-                                  const size_type count) :
-        array{}
+    constexpr array(const T* const source, const size_type count) : array{}
     {
         assert(array_size >= count);
         size_type index{0U};
@@ -66,23 +64,14 @@ public:
         }
     }
 
-    [[nodiscard]] constexpr array(const_iterator const _begin,
-                                  const_iterator const _end) :
+    constexpr array(const_iterator const _begin, const_iterator const _end) :
         array{_begin, static_cast<size_type>(std::distance(_begin, _end))}
     {}
 
-    [[nodiscard]] constexpr array(span<T const> const rhs) :
-        array{rhs.cbegin(), rhs.cend()}
+    constexpr array(span<T const> const rhs) : array{rhs.cbegin(), rhs.cend()}
     {}
 
-    [[nodiscard]] constexpr array(span<T> const rhs) :
-        array{rhs.cbegin(), rhs.cend()}
-    {}
-
-    constexpr array(array&&)      = default;
-    constexpr array(const array&) = default;
-    constexpr array& operator=(array&&) = default;
-    constexpr array& operator=(const array&) = default;
+    constexpr array(span<T> const rhs) : array{rhs.cbegin(), rhs.cend()} {}
 
     constexpr void insert(size_type const index, value_type element) noexcept
     {
@@ -97,22 +86,19 @@ public:
         }
     }
 
-    [[nodiscard]] constexpr reference operator[](size_t const index) noexcept
+    constexpr reference operator[](size_t const index) noexcept
     {
         return buffer_[index];
     }
 
-    [[nodiscard]] constexpr const_reference operator[](
-        const size_t index) const noexcept
+    constexpr const_reference operator[](const size_t index) const noexcept
     {
         return buffer_[index];
     }
 
-    [[nodiscard]] constexpr size_t size() const noexcept { return array_size; }
-    [[nodiscard]] constexpr bool empty() const noexcept
-    {
-        return array_size == 0U;
-    }
+    constexpr size_t size() const noexcept { return array_size; }
+    constexpr bool empty() const noexcept { return array_size == 0U; }
+
     [[nodiscard]] constexpr iterator begin() noexcept { return buffer_; }
     [[nodiscard]] constexpr const_iterator begin() const noexcept
     {
@@ -139,18 +125,22 @@ public:
     {
         return buffer_[array_size - 1U];
     }
+
     [[nodiscard]] constexpr const_reference front() const noexcept
     {
-        return cbegin();
+        return *cbegin();
     }
+
     [[nodiscard]] constexpr const_reference back() const noexcept
     {
-        return buffer_[array_size > 0U ? (array_size - 1U) : 0U];
+        return buffer_[array_size - 1U];
     }
+
     [[nodiscard]] constexpr const_reference cfront() const noexcept
     {
-        return cbegin();
+        return *cbegin();
     }
+
     [[nodiscard]] constexpr const_reference cback() const noexcept
     {
         return back();

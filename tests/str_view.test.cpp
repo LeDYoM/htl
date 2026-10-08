@@ -1,3 +1,8 @@
+#ifdef _MSC_VER
+    #pragma warning(push)
+    #pragma warning(disable : 4868)
+#endif
+
 #include "catch_include.hpp"
 
 import htypes;
@@ -141,3 +146,7 @@ TEST_CASE("str_view::offset", "[str_view]")
         CHECK(a.offset(2) == b);
     }
 }
+
+#ifdef _MSC_VER
+    #pragma warning(pop)
+#endif

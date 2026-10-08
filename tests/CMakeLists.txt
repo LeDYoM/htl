@@ -28,3 +28,7 @@ set(SOURCE_TESTS
 
 add_test_executable(${target} SOURCE_TESTS ${SOURCE_TESTS})
 target_link_libraries(${target} PRIVATE htl)
+
+if(MSVC)
+  target_compile_options(${target} PRIVATE "/wd4868;")
+endif()

@@ -27,7 +27,6 @@ public:
 
     /**
      * @brief  Default constructor
-     *
      */
     [[nodiscard]] constexpr BasicDictionary() noexcept = default;
 

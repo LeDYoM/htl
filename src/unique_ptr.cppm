@@ -1,5 +1,7 @@
 export module htypes:unique_ptr;
 
+import <concepts>;
+
 import :btypes;
 import :allocator;
 
@@ -123,5 +125,8 @@ export template <typename T, typename... Args>
     T* p{AllocatorType<T>::make_one(htps::forward<Args>(args)...)};
     return uptr<T>{htps::move(p)};
 }
+
+static_assert(!std::copy_constructible<htps::uptr<htps::s32>>);
+static_assert(std::move_constructible<htps::uptr<htps::s32>>);
 
 }  // namespace htps

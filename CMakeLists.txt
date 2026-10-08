@@ -68,9 +68,10 @@ target_sources(${target}
 )
 
 if(MSVC)
-  target_compile_options(${target}
-    INTERFACE "/wd4868;"
-  )
+  target_compile_options(${target} INTERFACE
+    "/wd4625;"  # Copy constructor generated
+    "/wd4820;"  # Padding bytes
+    )
 endif()
 
 set_my_standards_cxx_options(${target} 23)
