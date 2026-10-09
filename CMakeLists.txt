@@ -69,7 +69,9 @@ target_sources(${target}
 
 if(MSVC)
   target_compile_options(${target} INTERFACE
-    "/wd4625;"  # Copy constructor generated
+    "/wd4625;"  # Copy constructor implicitly generated
+    "/wd4626;"  # Copy assignment implicitly generated
+    "/wd5045;"  # Compiler will insert Spectre mitigation for memory load
     "/wd4820;"  # Padding bytes
     )
 endif()

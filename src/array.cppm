@@ -12,9 +12,6 @@ import :btypes;
 import :span;
 import :weak_ptr;
 
-#pragma warning(push)
-#pragma warning(disable : 4626 4514 5045)
-
 namespace htps
 {
 export template <class T, size_t array_size>
@@ -188,5 +185,3 @@ export template <typename T>
 array(T) -> array<T, 1U>;
 
 }  // namespace htps
-
-#pragma warning(pop)
