@@ -15,7 +15,8 @@ import :btypes;
 import :pair;
 
 #pragma warning(push)
-#pragma warning(disable : 4365 4774 5045)
+#pragma warning(disable : 4774 5045)
+// 4365
 
 namespace htps
 {
@@ -69,7 +70,7 @@ public:
     {}
 
     constexpr basic_str(const_iterator _begin, const_iterator _end) :
-        basic_str(_begin, (_end - _begin) + 1U)
+        basic_str(_begin, static_cast<size_type>(_end - _begin) + 1U)
     {}
 
     constexpr basic_str(basic_str&&) noexcept = default;
@@ -102,7 +103,7 @@ public:
         data_.reserve(capacity);
     }
 
-    basic_str_view<char_type> to_view() const noexcept
+    [[no_discard]] basic_str_view<char_type> to_view() const noexcept
     {
         return basic_str_view<char_type>{cbegin(), size()};
     }
