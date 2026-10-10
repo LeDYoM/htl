@@ -14,10 +14,6 @@ import :str_literal;
 import :btypes;
 import :pair;
 
-#pragma warning(push)
-#pragma warning(disable : 4774 5045)
-// 4365
-
 namespace htps
 {
 /**
@@ -103,7 +99,7 @@ public:
         data_.reserve(capacity);
     }
 
-    [[no_discard]] basic_str_view<char_type> to_view() const noexcept
+    [[nodiscard]] basic_str_view<char_type> to_view() const noexcept
     {
         return basic_str_view<char_type>{cbegin(), size()};
     }
@@ -758,5 +754,3 @@ inline basic_str<char_value> make_basic_str(f64&& n)
 }
 
 }  // namespace htps
-
-#pragma warning(pop)

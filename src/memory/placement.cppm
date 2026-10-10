@@ -6,9 +6,6 @@ module;
 module htypes:placement;
 import :btypes;
 
-#pragma warning(push)
-#pragma warning(disable : 4365)
-
 namespace htps
 {
 /**
@@ -53,5 +50,3 @@ public:
 };
 
 }  // namespace htps
-
-#pragma warning(pop)
