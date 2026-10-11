@@ -14,6 +14,9 @@ import :str_literal;
 import :btypes;
 import :pair;
 
+#pragma warning(push)
+#pragma warning(disable : 4774)
+
 namespace htps
 {
 /**
@@ -754,3 +757,5 @@ inline basic_str<char_value> make_basic_str(f64&& n)
 }
 
 }  // namespace htps
+
+#pragma warning(pop)
