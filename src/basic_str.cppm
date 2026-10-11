@@ -56,7 +56,7 @@ public:
         basic_str{other.m_begin, other.m_size}
     {}
 
-    template<size_type N>
+    template <size_type N>
     constexpr explicit basic_str(basic_str_literal<char_type, N> other) :
         basic_str{other.value, N - 1U}
     {}
@@ -69,10 +69,10 @@ public:
         basic_str(_begin, static_cast<size_type>(_end - _begin) + 1U)
     {}
 
-    constexpr basic_str(basic_str&&) noexcept = default;
+    constexpr basic_str(basic_str&&) noexcept  = default;
     basic_str& operator=(basic_str&&) noexcept = default;
 
-    constexpr basic_str(basic_str const& n) = default;
+    constexpr basic_str(basic_str const& n)              = default;
     constexpr basic_str& operator=(basic_str const& rhs) = default;
 
     basic_str& operator=(char_type const* const n)
@@ -452,7 +452,8 @@ public:
                 }
                 if (continue_inner)
                 {
-                    return std::distance(cbegin(), it_start);
+                    return static_cast<size_type>(
+                        std::distance(cbegin(), it_start));
                 }
             }
         }
@@ -666,8 +667,7 @@ public:
             }
         }
 
-        return (size() < rhs.size()
-                    ? std::strong_ordering::less
+        return (size() < rhs.size()       ? std::strong_ordering::less
                     : size() < rhs.size() ? std::strong_ordering::greater
                                           : std::strong_ordering::equal);
     }
