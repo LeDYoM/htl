@@ -15,7 +15,8 @@ import :btypes;
 import :pair;
 
 #pragma warning(push)
-#pragma warning(disable : 4365 4774 5045)
+#pragma warning(disable : 4774 5045)
+//4365
 
 namespace htps
 {
