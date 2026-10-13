@@ -5,6 +5,7 @@ module;
 #include <algorithm>
 #include <cctype>
 #include <compare>
+#include <format>
 
 export module htypes:bstr;
 
@@ -13,9 +14,6 @@ import :str_view;
 import :str_literal;
 import :btypes;
 import :pair;
-
-#pragma warning(push)
-#pragma warning(disable : 4774)
 
 namespace htps
 {
@@ -119,33 +117,26 @@ public:
         return result;
     }
 
-    template <size_type b_size, typename T, size_type N>
-    static int convert_to_imp_imp(char_type (&buffer)[b_size],
-                                  T const n,
-                                  char_type const (&fmt_str)[N])
+    template <typename T, size_type N = 32U>
+    static basic_str convert_to_imp(T const n)
     {
-        return static_cast<int>(std::snprintf(buffer, b_size, fmt_str, n));
+        char buffer[N];
+        std::format_to_n_result<char*> r{std::format_to_n(buffer, N, "{}", n)};
+        *(r.out) = 0;
+        return basic_str{buffer, static_cast<size_type>(r.size)};
     }
 
-    template <typename T, size_type N>
-    static basic_str convert_to_imp(T const n, char_type const (&fmt_str)[N])
-    {
-        char buffer[32U];
-        auto const size{convert_to_imp_imp(buffer, n, fmt_str)};
-        return basic_str{buffer, static_cast<size_type>(size)};
-    }
+    static basic_str to_str(u64 const n) { return convert_to_imp(n); }
 
-    static basic_str to_str(u64 const n) { return convert_to_imp(n, "%llu"); }
+    static basic_str to_str(s64 const n) { return convert_to_imp(n); }
 
-    static basic_str to_str(s64 const n) { return convert_to_imp(n, "%lld"); }
+    static basic_str to_str(u32 const n) { return convert_to_imp(n); }
 
-    static basic_str to_str(u32 const n) { return convert_to_imp(n, "%u"); }
+    static basic_str to_str(s32 const n) { return convert_to_imp(n); }
 
-    static basic_str to_str(s32 const n) { return convert_to_imp(n, "%d"); }
+    static basic_str to_str(f32 const n) { return convert_to_imp(n); }
 
-    static basic_str to_str(f32 const n) { return convert_to_imp(n, "%f"); }
-
-    static basic_str to_str(f64 const n) { return convert_to_imp(n, "%F"); }
+    static basic_str to_str(f64 const n) { return convert_to_imp(n); }
 
     template <typename T>
     bool is() const
@@ -757,5 +748,3 @@ inline basic_str<char_value> make_basic_str(f64&& n)
 }
 
 }  // namespace htps
-
-#pragma warning(pop)
