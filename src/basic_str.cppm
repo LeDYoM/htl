@@ -15,8 +15,7 @@ import :btypes;
 import :pair;
 
 #pragma warning(push)
-#pragma warning(disable : 4774 5045)
-//4365
+#pragma warning(disable : 4774)
 
 namespace htps
 {
@@ -60,7 +59,7 @@ public:
         basic_str{other.m_begin, other.m_size}
     {}
 
-    template<size_type N>
+    template <size_type N>
     constexpr explicit basic_str(basic_str_literal<char_type, N> other) :
         basic_str{other.value, N - 1U}
     {}
@@ -70,13 +69,13 @@ public:
     {}
 
     constexpr basic_str(const_iterator _begin, const_iterator _end) :
-        basic_str(_begin, (_end - _begin) + 1U)
+        basic_str(_begin, static_cast<size_type>(_end - _begin) + 1U)
     {}
 
-    constexpr basic_str(basic_str&&) noexcept = default;
+    constexpr basic_str(basic_str&&) noexcept  = default;
     basic_str& operator=(basic_str&&) noexcept = default;
 
-    constexpr basic_str(basic_str const& n) = default;
+    constexpr basic_str(basic_str const& n)              = default;
     constexpr basic_str& operator=(basic_str const& rhs) = default;
 
     basic_str& operator=(char_type const* const n)
@@ -103,7 +102,7 @@ public:
         data_.reserve(capacity);
     }
 
-    basic_str_view<char_type> to_view() const noexcept
+    [[nodiscard]] basic_str_view<char_type> to_view() const noexcept
     {
         return basic_str_view<char_type>{cbegin(), size()};
     }
@@ -456,7 +455,8 @@ public:
                 }
                 if (continue_inner)
                 {
-                    return std::distance(cbegin(), it_start);
+                    return static_cast<size_type>(
+                        std::distance(cbegin(), it_start));
                 }
             }
         }
@@ -670,8 +670,7 @@ public:
             }
         }
 
-        return (size() < rhs.size()
-                    ? std::strong_ordering::less
+        return (size() < rhs.size()       ? std::strong_ordering::less
                     : size() < rhs.size() ? std::strong_ordering::greater
                                           : std::strong_ordering::equal);
     }
