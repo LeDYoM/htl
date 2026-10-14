@@ -9,7 +9,8 @@ namespace htps
 // template <typename T, typename V>
 // using pair = std::pair<T, V>;
 #pragma warning(push)
-#pragma warning(disable : 4820 4625 4626)
+//#pragma warning(disable : 4820 4625 4626)
+#pragma warning(disable : 4626)
 
 export template <typename T1, typename T2>
 class pair

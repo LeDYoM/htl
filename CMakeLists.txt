@@ -77,6 +77,7 @@ if(MSVC)
 
   target_compile_options(${target} PRIVATE
     "/wd5045;"  # Compiler will insert Spectre mitigation for memory load
+    "/wd4820;"  # Padding bytes
     )
 endif()
 

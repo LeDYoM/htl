@@ -5,9 +5,6 @@ module;
 
 export module htypes:menum;
 
-#pragma warning(push)
-#pragma warning(disable : 5045)
-
 namespace htps
 {
 export template <typename T, T ValueMin = T::min, T ValueMax = T::max>
@@ -93,5 +90,3 @@ private:
 };
 
 }  // namespace htps
-
-#pragma warning(pop)
