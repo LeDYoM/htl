@@ -4,9 +4,6 @@ import :btypes;
 
 namespace htps
 {
-#pragma warning(push)
-#pragma warning(disable : 4514)  // Unused functions in MSVC
-
 export class GrowPolicyUnary
 {
 public:
@@ -24,7 +21,5 @@ public:
         return size > 0U ? (size * 2U) : 1U;
     }
 };
-
-#pragma warning(pop)
 
 }  // namespace htps

@@ -1,3 +1,5 @@
+#include <type_traits>
+
 #pragma warning(push)
 #pragma warning(disable : 4868)
 
@@ -6,6 +8,13 @@
 import htypes;
 
 using namespace htps;
+
+static_assert(std::is_move_constructible_v<str>, "str must be movable");
+static_assert(std::is_move_assignable_v<str>, "str must be movable assignable");
+static_assert(std::is_default_constructible_v<str>,
+              "str must be default constructible");
+static_assert(std::is_copy_constructible_v<str>,
+              "str must be copy constructible");
 
 TEST_CASE("str::str Default constructor", "[str]")
 {

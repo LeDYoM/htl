@@ -6,6 +6,7 @@ module;
 #include <cctype>
 #include <compare>
 #include <format>
+#include <concepts>
 
 export module htypes:bstr;
 
@@ -139,6 +140,7 @@ public:
     static basic_str to_str(f64 const n) { return convert_to_imp(n); }
 
     template <typename T>
+    requires std::is_default_constructible_v<T>
     bool is() const
     {
         T temp;
