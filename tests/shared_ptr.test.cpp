@@ -1,14 +1,8 @@
-#pragma warning(push)
-#pragma warning(disable : 4868)
-
 #include "catch_include.hpp"
 
 import htypes;
 
 using namespace htps;
-
-#pragma warning(push)
-#pragma warning(disable : 4625 4820)
 
 TEST_CASE("shared_ptr::shared_ptr", "[types][shared_ptr]")
 {
@@ -433,6 +427,3 @@ TEST_CASE("shared_ptr move another shared_ptr to base different types",
     ab2.reset();
     CHECK(ab2 == nullptr);
 }
-
-#pragma warning(pop)
-#pragma warning(pop)

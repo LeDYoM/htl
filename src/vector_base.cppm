@@ -12,9 +12,6 @@ import :growpolicy;
 import :vector_storage;
 import :allocator;
 
-#pragma warning(push)
-#pragma warning(disable : 5045)
-
 namespace htps
 {
 /**
@@ -864,5 +861,3 @@ public:
 };
 
 }  // namespace htps
-
-#pragma warning(pop)

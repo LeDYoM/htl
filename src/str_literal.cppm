@@ -6,9 +6,6 @@ export module htypes:str_literal;
 
 import :btypes;
 
-#pragma warning(push)
-#pragma warning(disable : 4820 4626 5027)
-
 namespace htps
 {
 export using str_literal_hash = size_type;
@@ -79,7 +76,7 @@ struct basic_str_literal
 
     constexpr str_literal_hash hash() const noexcept { return value[0]; }
 
-    const size_type m_real_size;
+    size_type m_real_size;
     char_type value[N];
 };
 
@@ -87,5 +84,3 @@ export template <size_type N>
 using str_literal = basic_str_literal<char, N>;
 
 }  // namespace htps
-
-#pragma warning(pop)

@@ -1,6 +1,3 @@
-#pragma warning(push)
-#pragma warning(disable : 4868)
-
 #include "catch_include.hpp"
 
 import htypes;
@@ -143,9 +140,6 @@ TEST_CASE("shared_ptr with unique_ptr", "[types][unique_ptr][shared_ptr]")
     }
 }
 
-#pragma warning(push)
-#pragma warning(disable : 4820)
-
 namespace
 {
 struct Base
@@ -178,6 +172,3 @@ TEST_CASE("unique_ptr from base", "[types][unique_ptr]")
     set(htps::move(c));
     set(muptr<Base>(2));
 }
-
-#pragma warning(pop)
-#pragma warning(pop)

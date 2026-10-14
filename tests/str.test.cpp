@@ -1,8 +1,4 @@
 #include <type_traits>
-
-#pragma warning(push)
-#pragma warning(disable : 4868)
-
 #include "catch_include.hpp"
 
 import htypes;
@@ -563,5 +559,3 @@ TEST_CASE("str::fromCharAndSize", "[str]")
     CHECK(text4.empty());
     CHECK(text3 == text4);
 }
-
-#pragma warning(pop)

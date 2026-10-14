@@ -1,6 +1,3 @@
-#pragma warning(push)
-#pragma warning(disable : 4868)
-
 #include "catch_include.hpp"
 
 import htypes;
@@ -182,5 +179,3 @@ TEST_CASE("span::span_of_one_element", "[span]")
         CHECK(test_span[0U] == data);
     }
 }
-
-#pragma warning(pop)
