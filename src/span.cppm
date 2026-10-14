@@ -8,9 +8,6 @@ export module htypes:span;
 import :btypes;
 import :vector_base;
 
-#pragma warning(push)
-#pragma warning(disable : 4626 5027)
-
 namespace htps
 {
 export template <typename T>
@@ -74,8 +71,8 @@ public:
     }
 
 private:
-    rptr<T> const m_begin;
-    rptr<T> const m_end;
+    rptr<T> m_begin;
+    rptr<T> m_end;
 };
 
 template <typename T,
@@ -92,5 +89,3 @@ template <typename T, size_type Size>
 span(T (&)[Size]) -> span<T>;
 
 }  // namespace htps
-
-#pragma warning(pop)

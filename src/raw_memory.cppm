@@ -7,9 +7,6 @@ export module htypes:raw_memory;
 import :btypes;
 import :str;
 
-#pragma warning(push)
-#pragma warning(disable : 4514)  // Unused functions in MSVC
-
 namespace htps
 {
 /**
@@ -86,5 +83,3 @@ private:
 };
 
 }  // namespace htps
-
-#pragma warning(pop)
