@@ -9,7 +9,10 @@ import :btypes;
 namespace htps
 {
 
-export template <typename T, auto Allocate, auto Deallocate, auto DeallocateWithSize>
+export template <typename T,
+                 auto Allocate,
+                 auto Deallocate,
+                 auto DeallocateWithSize>
 class AllocatorFunc
 {
 public:

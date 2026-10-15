@@ -21,6 +21,12 @@ class BasicConstructDestruct
 public:
     using pointer = T*;
 
+    /**
+     * @brief Construct an object in a given memory address.
+     * @tparam Args The type of the args passed
+     * @param where The address where to construct
+     * @param args The actual params
+     */
     template <typename... Args>
     static constexpr void construct(pointer where, Args&&... args) noexcept(
         noexcept(T(htps::forward<Args>(args)...)))
