@@ -32,6 +32,8 @@ target_sources(${target}
   PUBLIC
   FILE_SET CXX_MODULES
   FILES
+  src/shared_ptr/counter.cppm
+  src/shared_ptr/managed_pointer.cppm
   src/array.cppm
   src/memory/alloc_func.cppm
   src/memory/allocator.cppm

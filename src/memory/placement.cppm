@@ -22,17 +22,12 @@ public:
     using pointer = T*;
 
     template <typename... Args>
-    static void construct(pointer where, Args&&... args) noexcept(
+    static constexpr void construct(pointer where, Args&&... args) noexcept(
         noexcept(T(htps::forward<Args>(args)...)))
     {
         assert(where != nullptr);
 
-        if constexpr (sizeof...(args) == 3U)
-        {
-            ::new (static_cast<void*>(where)) T();
-        }
-
-        else if constexpr (sizeof...(args) > 0U)
+        if constexpr (sizeof...(args) > 0U)
         {
             ::new (static_cast<void*>(where)) T(htps::forward<Args>(args)...);
         }
@@ -42,7 +37,7 @@ public:
         }
     }
 
-    static void destruct(pointer where) noexcept
+    static void destruct(pointer where) noexcept(noexcept(where->~T()))
     {
         assert(where != nullptr);
         where->~T();

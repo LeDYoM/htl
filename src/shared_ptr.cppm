@@ -3,81 +3,11 @@ export module htypes:shared_ptr;
 import :btypes;
 import :unique_ptr;
 import :allocator;
+import :counter;
+import :managed_pointer;
 
 namespace htps
 {
-namespace shptr_detail
-{
-class counter
-{
-public:
-    constexpr counter() noexcept = default;
-
-    constexpr counter(const counter&) noexcept            = delete;
-    constexpr counter& operator=(const counter&) noexcept = delete;
-
-    constexpr counter(counter&&)            = default;
-    constexpr counter& operator=(counter&&) = default;
-
-    constexpr void reset() noexcept { m_counter = 0U; }
-
-    [[nodiscard]] constexpr fast_u32 get() const noexcept { return m_counter; }
-    [[nodiscard]] constexpr fast_u32 get_weak() const noexcept
-    {
-        return m_weak_counter;
-    }
-
-    constexpr void increment() noexcept { ++m_counter; }
-    constexpr void increment_weak() noexcept { ++m_weak_counter; }
-
-    constexpr void decrement() noexcept { --m_counter; }
-    constexpr void decrement_weak() noexcept { --m_weak_counter; }
-
-    [[nodiscard]] constexpr bool decrement_destroy()
-    {
-        decrement();
-        if (m_counter == 0U)
-        {
-            if (m_weak_counter == 0U)
-            {
-                destroy();
-                return true;
-            }
-        }
-        return false;
-    }
-
-    constexpr virtual ~counter() noexcept     = default;
-    constexpr virtual void destroy() noexcept = 0;
-
-private:
-    fast_u32 m_counter{1U};
-    fast_u32 m_weak_counter{0U};
-};
-
-template <typename T>
-struct ManagedPointer final : public counter
-{
-    using counter::counter;
-
-    explicit constexpr ManagedPointer(T* originalPointer) :
-        m_originalPointer{originalPointer}
-    {}
-
-    constexpr void destroy() noexcept override
-    {
-        if (m_originalPointer != nullptr)
-        {
-            AllocatorType<T>::delete_one(m_originalPointer);
-            m_originalPointer = nullptr;
-        }
-    }
-
-    T* m_originalPointer{nullptr};
-};
-
-}  // namespace shptr_detail
-
 /**
  * @brief Shared pointer. Owning shared pointer that manages construction,
  * copying and destruction.

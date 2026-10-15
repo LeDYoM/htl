@@ -1,4 +1,3 @@
-/*
 #include "catch_include.hpp"
 
 import htypes;
@@ -106,8 +105,8 @@ TEST_CASE("vector::vector(std::initializer_list)", "[vector]")
     }
 
     {
-        sptr<u32> sp1{msptr<u32>(1)};
-        sptr<u32> sp2{msptr<u32>(9)};
+        sptr<u32> sp1{msptr<u32>(1U)};
+        sptr<u32> sp2{msptr<u32>(9U)};
         vector<sptr<u32>> m{sp1, sp2};
         CHECK(m == vector<sptr<u32>>{htps::move(sp1), htps::move(sp2)});
     }
@@ -136,8 +135,8 @@ TEST_CASE("vector::vector::operator=(std::initializer_list)", "[vector]")
 
     SECTION("Vector of shared pointers")
     {
-        sptr<u32> sp1{msptr<u32>(1)};
-        sptr<u32> sp2{msptr<u32>(9)};
+        sptr<u32> sp1{msptr<u32>(1U)};
+        sptr<u32> sp2{msptr<u32>(9U)};
         vector<sptr<u32>> m;
         m = {sp1, sp2};
         vector<sptr<u32>> m2;
@@ -167,7 +166,7 @@ TEST_CASE("vector::emplace", "[vector]")
 {
     vector<u32> v;
 
-    v.emplace_back(0);
+    v.emplace_back(0U);
     CHECK(v.size() == 1U);
     v.pop_back();
     CHECK(v.empty());
@@ -529,9 +528,6 @@ TEST_CASE("vector::Grow policy", "[vector]")
     CHECK(double_grow_test_vector.capacity() == 4U);
 }
 
-#pragma warning(push)
-#pragma warning(disable : 4514)
-
 struct MoveOnly
 {
 public:
@@ -546,8 +542,6 @@ public:
 private:
     int a;
 };
-
-#pragma warning(pop)
 
 TEST_CASE("vector::Movable only objects", "[vector]")
 {
@@ -628,8 +622,8 @@ TEST_CASE("vector::insert_vector", "[vector]")
     SECTION("Shared pointers")
     {
         vector<sptr<u32>> v;
-        v.push_back(msptr<u32>(0));
-        v.push_back(msptr<u32>(1));
+        v.push_back(msptr<u32>(0U));
+        v.push_back(msptr<u32>(1U));
         CHECK_FALSE(v.empty());
         CHECK(v.size() == 2U);
 
@@ -639,7 +633,7 @@ TEST_CASE("vector::insert_vector", "[vector]")
             v2.insert(v);
             CHECK_FALSE(v2.empty());
             CHECK(v2.size() == 2U);
-            v2.push_back(msptr<u32>(2));
+            v2.push_back(msptr<u32>(2U));
             CHECK(v2.size() == 3U);
             v2.insert(v);
             CHECK(v2.size() == 5U);
@@ -740,7 +734,7 @@ TEST_CASE("vector::insert_element", "[vector]")
         vector<sptr<u32>> v;
 
         CHECK(v.empty());
-        v.insert(v.begin(), msptr<u32>(3));
+        v.insert(v.begin(), msptr<u32>(3U));
         CHECK_FALSE(v.empty());
         CHECK(v.size() == 1U);
         CHECK((*v[0]) == 3);
@@ -748,18 +742,18 @@ TEST_CASE("vector::insert_element", "[vector]")
         bool a = v[0] == 3;
         (void)(a);
 
-        v.insert(v.begin(), msptr<u32>(4));
+        v.insert(v.begin(), msptr<u32>(4U));
         CHECK(v.size() == 2U);
         CHECK((*v[0]) == 4);
         CHECK((*v[1]) == 3);
 
-        v.insert(v.begin() + 1, msptr<u32>(5));
+        v.insert(v.begin() + 1, msptr<u32>(5U));
         CHECK(v.size() == 3U);
         CHECK((*v[0]) == 4);
         CHECK((*v[1]) == 5);
         CHECK((*v[2]) == 3);
 
-        v.insert(v.end(), msptr<u32>(6));
+        v.insert(v.end(), msptr<u32>(6U));
         CHECK(v.size() == 4U);
         CHECK((*v[0]) == 4);
         CHECK((*v[1]) == 5);
@@ -772,7 +766,7 @@ TEST_CASE("vector::insert_element", "[vector]")
         CHECK((*v[0]) == 4);
         CHECK((*v[1]) == 5);
 
-        v.insert(v.end(), msptr<u32>(7));
+        v.insert(v.end(), msptr<u32>(7U));
         CHECK(v.size() == 3U);
         CHECK((*v[0]) == 4);
         CHECK((*v[1]) == 5);
@@ -785,30 +779,30 @@ TEST_CASE("vector::insert_element", "[vector]")
 
         v.reserve(8);
         CHECK(v.empty());
-        v.insert(v.begin(), msptr<u32>(2));
+        v.insert(v.begin(), msptr<u32>(2U));
         CHECK_FALSE(v.empty());
         CHECK(v.size() == 1U);
         CHECK(*(v[0]) == 2);
 
-        v.insert(v.begin(), msptr<u32>(3));
+        v.insert(v.begin(), msptr<u32>(3U));
         CHECK(v.size() == 2U);
         CHECK(*(v[0]) == 3);
         CHECK(*(v[1]) == 2);
 
-        v.insert(v.end(), msptr<u32>(4));
+        v.insert(v.end(), msptr<u32>(4U));
         CHECK(v.size() == 3U);
         CHECK(*(v[0]) == 3);
         CHECK(*(v[1]) == 2);
         CHECK(*(v[2]) == 4);
 
-        v.insert(v.begin(), msptr<u32>(5));
+        v.insert(v.begin(), msptr<u32>(5U));
         CHECK(v.size() == 4U);
         CHECK(*(v[0]) == 5);
         CHECK(*(v[1]) == 3);
         CHECK(*(v[2]) == 2);
         CHECK(*(v[3]) == 4);
 
-        v.insert(v.begin() + 1, msptr<u32>(6));
+        v.insert(v.begin() + 1, msptr<u32>(6U));
         CHECK(v.size() == 5U);
         CHECK(*(v[0]) == 5);
         CHECK(*(v[1]) == 6);
@@ -816,7 +810,7 @@ TEST_CASE("vector::insert_element", "[vector]")
         CHECK(*(v[3]) == 2);
         CHECK(*(v[4]) == 4);
 
-        v.insert(v.begin() + 2, msptr<u32>(7));
+        v.insert(v.begin() + 2, msptr<u32>(7U));
         CHECK(v.size() == 6U);
         CHECK(*(v[0]) == 5);
         CHECK(*(v[1]) == 6);
@@ -825,7 +819,7 @@ TEST_CASE("vector::insert_element", "[vector]")
         CHECK(*(v[4]) == 2);
         CHECK(*(v[5]) == 4);
 
-        v.insert(v.begin() + 3, msptr<u32>(8));
+        v.insert(v.begin() + 3, msptr<u32>(8U));
         CHECK(v.size() == 7U);
         CHECK(*(v[0]) == 5);
         CHECK(*(v[1]) == 6);
@@ -835,7 +829,7 @@ TEST_CASE("vector::insert_element", "[vector]")
         CHECK(*(v[5]) == 2);
         CHECK(*(v[6]) == 4);
 
-        v.insert(v.begin() + 4, msptr<u32>(9));
+        v.insert(v.begin() + 4, msptr<u32>(9U));
         CHECK(v.size() == 8U);
         CHECK(*(v[0]) == 5);
         CHECK(*(v[1]) == 6);
@@ -846,7 +840,7 @@ TEST_CASE("vector::insert_element", "[vector]")
         CHECK(*(v[6]) == 2);
         CHECK(*(v[7]) == 4);
 
-        v.insert(v.begin() + 5, msptr<u32>(10));
+        v.insert(v.begin() + 5, msptr<u32>(10U));
         CHECK(v.size() == 9U);
         CHECK(*(v[0]) == 5);
         CHECK(*(v[1]) == 6);
@@ -882,4 +876,4 @@ TEST_CASE("vector::set_at_index", "[vector]")
         CHECK(*(v[5]) == 40U);
         CHECK(r == nullptr);
 }
-*/
+
