@@ -8,8 +8,6 @@ namespace htps::shptr_detail
 template <typename T>
 struct ManagedPointer final : public counter
 {
-    using counter::counter;
-
     explicit constexpr ManagedPointer(T* originalPointer) noexcept :
         m_originalPointer{originalPointer}
     {}

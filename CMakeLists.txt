@@ -85,5 +85,20 @@ if(MSVC)
     )
 endif()
 
+option(ENABLE_CLANG_TIDY "Run clang-tidy with C++ compiler" ON)
+
+if(ENABLE_CLANG_TIDY)
+message("AAAAAAAAAAAAAAAAAAAAAAAAA")
+find_program(CLANG_TIDY_EXE "clang-tidy")
+
+if(CLANG_TIDY_EXE)
+    message(STATUS "clang-tidy found: ${CLANG_TIDY_EXE}")
+    set(CMAKE_CXX_CLANG_TIDY ${CLANG_TIDY_EXE} -checks=-*,readability-*)
+    message("CMAKE_CXX_CLANG_TIDY: ${CMAKE_CXX_CLANG_TIDY}")
+else()
+    message(WARNING "clang-tidy not found!")
+endif()
+endif()
+
 set_my_standards_cxx_options(${target} 23)
 add_subdirectory(tests)

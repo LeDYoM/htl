@@ -31,6 +31,7 @@ public:
 
     static void delete_one(T* pointer) noexcept
     {
+        int *a = new int;
         AllocatorType<T>::destruct(pointer);
         AllocatorType<T>::deallocate_with_size(pointer, 1U);
     }
