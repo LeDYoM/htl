@@ -24,10 +24,10 @@ public:
         return static_cast<pointer>(Allocate(sizeof(T) * size));
     }
 
-    static void deallocate(pointer element)
+    static void deallocate(pointer element, size_type const size = 1U)
     {
         assert(element != nullptr);
-        Deallocate(element);
+        DeallocateWithSize(element, sizeof(T) * size);
     }
 
     static void deallocate_with_size(pointer element, size_type const size)

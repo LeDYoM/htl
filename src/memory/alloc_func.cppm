@@ -14,6 +14,11 @@ export void free_with_size(void* block, std::size_t const)
 
 export template <typename T>
 using AllocatorMallocFree =
-    AllocatorFunc<T, std::malloc, std::free, free_with_size>;
+    AllocatorFunc<T,
+                  std::malloc,
+                  std::free,
+                  [](void* block, std::size_t const) { std::free(block); }
+//                  free_with_size
+                  >;
 
 }  // namespace htps
