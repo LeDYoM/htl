@@ -14,11 +14,12 @@ class uptr
 {
 public:
     using type = T;
+
     constexpr uptr() noexcept = default;
     constexpr uptr(std::nullptr_t) noexcept : m_pointer{nullptr} {}
     constexpr uptr(rptr<T> pointer) noexcept : m_pointer{pointer} {}
 
-    uptr(uptr const&) = delete;
+    uptr(uptr const&)            = delete;
     uptr& operator=(uptr const&) = delete;
 
     template <typename U>
@@ -84,6 +85,9 @@ public:
         return m_pointer != nullptr;
     }
 
+    [[nodiscard]] constexpr bool operator==(uptr const& rhs) const noexcept =
+        default;
+
     ~uptr() noexcept { reset(); }
 
 private:
@@ -92,13 +96,6 @@ private:
 
     rptr<T> m_pointer{nullptr};
 };
-
-export template <typename T>
-[[nodiscard]] constexpr bool operator==(uptr<T> const& lhs,
-                                        uptr<T> const& rhs) noexcept
-{
-    return lhs.get() == rhs.get();
-}
 
 export template <typename T>
 [[nodiscard]] constexpr bool operator==(uptr<T> const& lhs,
