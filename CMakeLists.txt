@@ -35,8 +35,8 @@ target_sources(${target}
   src/shared_ptr/counter.cppm
   src/shared_ptr/managed_pointer.cppm
   src/array.cppm
-  src/memory/alloc_func.cppm
-  src/memory/allocator.cppm
+  src/memory/allocator_malloc_free.cppm
+  src/memory/allocator_type.cppm
   src/memory/allocatorfunc.cppm
   src/memory/placement.cppm
   src/algoutils.cppm

@@ -86,7 +86,7 @@ public:
     {
         if (buffer_ != nullptr)
         {
-            Allocator::deallocate_with_size(buffer_, capacity_);
+            Allocator::deallocate(buffer_, capacity_);
             buffer_   = nullptr;
             size_     = 0U;
             capacity_ = 0U;

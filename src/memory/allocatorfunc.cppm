@@ -9,10 +9,7 @@ import :btypes;
 namespace htps
 {
 
-export template <typename T,
-                 auto Allocate,
-                 auto Deallocate,
-                 auto DeallocateWithSize>
+export template <typename T, auto Allocate, auto Deallocate>
 class AllocatorFunc
 {
 public:
@@ -24,16 +21,10 @@ public:
         return static_cast<pointer>(Allocate(sizeof(T) * size));
     }
 
-    static void deallocate(pointer element, size_type const size = 1U)
+    static void deallocate(pointer element, size_type const size)
     {
         assert(element != nullptr);
-        DeallocateWithSize(element, sizeof(T) * size);
-    }
-
-    static void deallocate_with_size(pointer element, size_type const size)
-    {
-        assert(element != nullptr);
-        DeallocateWithSize(element, sizeof(T) * size);
+        Deallocate(element, sizeof(T) * size);
     }
 };
 

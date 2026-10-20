@@ -1,7 +1,7 @@
 export module htypes:allocator;
 
 import :placement;
-import :alloc_func;
+import :allocator_malloc_free;
 
 namespace htps
 {
@@ -24,11 +24,14 @@ public:
 
     static void delete_one(T* pointer) noexcept(
         noexcept(noexcept(ConstructDestruct::destruct(pointer)) &&
-                 noexcept(ReserveDestroy::deallocate_with_size(pointer, 1U))))
+                 noexcept(ReserveDestroy::deallocate(pointer, 1U))))
     {
         ConstructDestruct::destruct(pointer);
-        ReserveDestroy::deallocate_with_size(pointer, 1U);
+        ReserveDestroy::deallocate(pointer, 1U);
     }
 };
+
+template <typename T>
+using DefaultAllocator = AllocatorType<T>;
 
 }  // namespace htps

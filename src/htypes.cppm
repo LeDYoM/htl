@@ -1,6 +1,6 @@
 export module htypes;
 
-//export import :alloc_func;
+//export import :allocator_malloc_free;
 //export import :allocator;
 //export import :allocatorfunc;
 
