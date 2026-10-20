@@ -81,26 +81,6 @@
             }
         },
         {
-            "name": "clang-debug",
-            "generator": "Ninja",
-            "inherits": "default",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug",
-                "CMAKE_C_COMPILER": "clang",
-                "CMAKE_CXX_COMPILER": "clang++"
-            }
-        },
-        {
-            "name": "clang-release",
-            "generator": "Ninja",
-            "inherits": "default",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release",
-                "CMAKE_C_COMPILER": "clang",
-                "CMAKE_CXX_COMPILER": "clang++"
-            }
-        },
-        {
             "name": "linux-gcc",
             "displayName": "GCC 13.2.0 x86_64-linux-gnu",
             "description": "Using compilers: C = /usr/bin/gcc, CXX = /usr/bin/g++",
@@ -114,14 +94,6 @@
         }
     ],
     "buildPresets": [
-        {
-            "name": "clang-debug",
-            "configurePreset": "clang-debug"
-        },
-        {
-            "name": "clang-release",
-            "configurePreset": "clang-release"
-        },
         {
             "name": "win_vs_2022_x64_debug",
             "description": "Build for Windows x64 in Debug configuration using Visual Studio 2022",
@@ -166,7 +138,7 @@
             "inheritConfigureEnvironment": true,
             "configuration": "Release"
         },
-        {
+                {
             "name": "win_msvc18_x64_ninja_multi_debug",
             "description": "Build for Windows x64 in Debug configuration using Ninja with Visual Studio 2026",
             "displayName": "Windows Ninja VS 2026 x64 debug",

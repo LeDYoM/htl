@@ -1,6 +1,8 @@
-export module htypes:unique_ptr;
+module;
 
-include <concepts>
+#include <concepts>
+
+export module htypes:unique_ptr;
 
 import :btypes;
 import :allocator;
