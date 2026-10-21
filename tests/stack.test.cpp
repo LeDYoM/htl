@@ -121,9 +121,46 @@ TEST_CASE("stack::non copyable class")
     CHECK(dummy.empty());
 }
 
+TEST_CASE("stack::operator==")
+{
+    stack<int> object_0;
+    stack<int> object_1;
+
+    CHECK(object_0.empty());
+    CHECK(object_1.empty());
+    CHECK(object_0 == object_1);
+    CHECK_FALSE(object_0 != object_1);
+    CHECK(object_0.size() == object_1.size());
+
+    object_0.push_back(4);
+    CHECK_FALSE(object_0 == object_1);
+    CHECK(object_0 != object_1);
+    CHECK(object_0.size() != object_1.size());
+
+    object_1.push_back(7);
+    CHECK_FALSE(object_0 == object_1);
+    CHECK(object_0 != object_1);
+    CHECK(object_0.size() == object_1.size());
+
+    CHECK(object_0.cback() == 4);
+    object_0.pop_back();
+    CHECK_FALSE(object_0 == object_1);
+    CHECK(object_0 != object_1);
+    CHECK(object_0.size() != object_1.size());
+
+    object_0.push_back(7);
+    CHECK(object_0 == object_1);
+    CHECK_FALSE(object_0 != object_1);
+    CHECK(object_0.size() == object_1.size());
+}
+
 TEST_CASE("stack of shared pointers")
 {
-    {
-        stack<sptr<int>> dummy{msptr<int>(3), msptr<int>(4), msptr<int>(5)};
-    }
+    stack<sptr<int>> dummy{msptr<int>(3), msptr<int>(4), msptr<int>(5)};
+    CHECK(dummy.size() == 3);
+    sptr result = move(dummy.back());
+    CHECK(*result == 5);
+    dummy.pop_back();
+    dummy.push_back(msptr<int>(8));
+    CHECK(*(dummy.cback()) == 8);
 }

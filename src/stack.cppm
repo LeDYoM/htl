@@ -19,8 +19,8 @@ namespace htps
  * @tparam GrowPolicy Policy class to dinamically increment the capacity
  */
 export template <typename T,
-          typename Allocator  = AllocatorType<T>,
-          typename GrowPolicy = GrowPolicyUnary>
+                 typename Allocator  = AllocatorType<T>,
+                 typename GrowPolicy = GrowPolicyUnary>
 class stack final
 {
 public:
@@ -75,33 +75,10 @@ public:
 
     constexpr void clear() noexcept { m_data.clear(); }
 
-    template <class A>
-    friend constexpr bool operator==(const stack<A>& lhs,
-                                     const stack<A>& rhs) noexcept;
-
-    template <class A>
-    friend constexpr bool operator!=(const stack<A>& lhs,
-                                     const stack<A>& rhs) noexcept;
+    constexpr bool operator==(stack const& rhs) const noexcept = default;
 
 private:
     vector<T, Allocator, GrowPolicy> m_data;
 };
 
-template <class A>
-constexpr void swap(stack<A>& lhs, stack<A>& rhs) noexcept
-{
-    lhs.swap(rhs);
-}
-
-template <class A>
-constexpr bool operator==(const stack<A>& lhs, const stack<A>& rhs) noexcept
-{
-    return lhs.m_data == rhs.m_data;
-}
-
-template <class A>
-constexpr bool operator!=(const stack<A>& lhs, const stack<A>& rhs) noexcept
-{
-    return lhs.m_data != rhs.m_data;
-}
 }  // namespace htps
