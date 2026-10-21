@@ -19,8 +19,8 @@ class sptr final
 {
 public:
     constexpr sptr() noexcept : m_ptr{nullptr}, m_counter{nullptr} {}
-
-    constexpr sptr(nullptr_t) noexcept : m_ptr{nullptr}, m_counter{nullptr} {}
+    constexpr sptr(std::nullptr_t) noexcept : m_ptr{nullptr}, m_counter{nullptr}
+    {}
 
     explicit constexpr sptr(T* ptr) : m_ptr{htps::move(ptr)}
     {

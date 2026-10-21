@@ -6,8 +6,8 @@ namespace htps
 {
 static constexpr size_type npos{static_cast<size_type>(-1)};
 
-export [[nodiscard]] constexpr size_type strnlen(nullptr_t,
-                                                 size_type = npos) noexcept
+export [[nodiscard]] constexpr size_type strnlen(std::nullptr_t,
+                                          size_type = npos) noexcept
 {
     return 0U;
 }

@@ -32,7 +32,7 @@ public:
      */
     constexpr function() noexcept : callable_{nullptr} {}
 
-    constexpr explicit function(nullptr_t) noexcept : function{} {}
+    constexpr function(std::nullptr_t) noexcept : function{} {}
 
     /**
      * @brief Construct from a callable object. Normally, a lambda or a pointer
@@ -42,7 +42,7 @@ public:
      * @param t Object to construct from
      */
     template <typename T>
-    constexpr explicit function(T t) : callable_{msptr<CallableT<T>>(htps::move(t))}
+    constexpr function(T t) : callable_{msptr<CallableT<T>>(htps::move(t))}
     {}
 
     /**

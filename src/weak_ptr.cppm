@@ -10,7 +10,7 @@ class wptr final
 {
 public:
     constexpr wptr() noexcept = default;
-    constexpr wptr(nullptr_t) noexcept : wptr{} {}
+    constexpr wptr(std::nullptr_t) noexcept : wptr{} {}
 
     constexpr wptr(wptr&& wp) noexcept :
         wptr{htps::move(wp.m_ptr), htps::move(wp.m_counter)}
@@ -140,7 +140,7 @@ export template <typename T>
 wptr(wptr<T>) -> wptr<T>;
 
 export template <typename T>
-[[nodiscard]] bool operator==(wptr<T> const& lhs, nullptr_t) noexcept
+[[nodiscard]] bool operator==(wptr<T> const& lhs, std::nullptr_t) noexcept
 {
     return lhs.expired();
 }
