@@ -3,7 +3,7 @@ module;
 #include <cassert>
 #include <new>
 
-module htypes:placement;
+export module htypes:placement;
 import :btypes;
 
 namespace htps

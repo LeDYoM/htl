@@ -54,6 +54,8 @@ export using fast_s32   = int_fast32_t;
 export using fast_s16   = int_fast16_t;
 export using fast_s8    = int_fast8_t;
 
+export using nullptr_t  = decltype(nullptr);
+
 export template <typename T, typename V>
 using map = std::map<T, V>;
 

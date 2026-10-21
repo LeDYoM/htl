@@ -50,7 +50,7 @@ public:
     constexpr T& operator*() noexcept { return *pointer_; }
     constexpr T const& operator*() const noexcept { return *pointer_; }
 
-    constexpr bool operator==(std::nullptr_t) const noexcept
+    constexpr bool operator==(nullptr_t) const noexcept
     {
         return pointer_ == nullptr;
     }
