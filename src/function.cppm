@@ -32,7 +32,7 @@ public:
      */
     constexpr function() noexcept : callable_{nullptr} {}
 
-    constexpr function(std::nullptr_t) noexcept : function{} {}
+    constexpr function(nullptr_t) noexcept : function{} {}
 
     /**
      * @brief Construct from a callable object. Normally, a lambda or a pointer

@@ -19,10 +19,10 @@ class sptr final
 {
 public:
     constexpr sptr() noexcept : m_ptr{nullptr}, m_counter{nullptr} {}
-    constexpr sptr(std::nullptr_t) noexcept : m_ptr{nullptr}, m_counter{nullptr}
-    {}
 
-    explicit constexpr sptr(T* ptr) : m_ptr{htps::move(ptr)}
+    constexpr sptr(nullptr_t) noexcept : m_ptr{nullptr}, m_counter{nullptr} {}
+
+    constexpr explicit sptr(T* ptr) : m_ptr{htps::move(ptr)}
     {
         if (m_ptr != nullptr)
         {
@@ -127,10 +127,8 @@ public:
         return *this;
     }
 
-    [[nodiscard]] constexpr bool operator==(sptr const& rhs) const noexcept
-    {
-        return m_ptr == rhs.m_ptr;
-    }
+    [[nodiscard]] constexpr bool operator==(sptr const& rhs) const noexcept =
+        default;
 
     template <typename Y = T>
     [[nodiscard]] constexpr bool operator==(Y* rhs) const noexcept

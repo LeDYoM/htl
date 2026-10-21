@@ -16,7 +16,7 @@ public:
     using type = T;
 
     constexpr uptr() noexcept = default;
-    constexpr uptr(std::nullptr_t) noexcept : m_pointer{nullptr} {}
+    constexpr uptr(nullptr_t) noexcept : m_pointer{nullptr} {}
     constexpr uptr(rptr<T> pointer) noexcept : m_pointer{pointer} {}
 
     uptr(uptr const&)            = delete;
@@ -49,7 +49,7 @@ public:
         return *this;
     }
 
-    constexpr uptr& operator=(std::nullptr_t) noexcept
+    constexpr uptr& operator=(nullptr_t) noexcept
     {
         reset();
         return *this;
@@ -105,15 +105,13 @@ export template <typename T>
 }
 
 export template <typename T>
-[[nodiscard]] constexpr bool operator==(uptr<T> const& lhs,
-                                        std::nullptr_t) noexcept
+[[nodiscard]] constexpr bool operator==(uptr<T> const& lhs, nullptr_t) noexcept
 {
     return lhs.get() == nullptr;
 }
 
 export template <typename T>
-[[nodiscard]] constexpr bool operator!=(uptr<T> const& lhs,
-                                        std::nullptr_t) noexcept
+[[nodiscard]] constexpr bool operator!=(uptr<T> const& lhs, nullptr_t) noexcept
 {
     return lhs.get() != nullptr;
 }
