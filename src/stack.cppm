@@ -40,14 +40,17 @@ public:
      */
     explicit constexpr stack(const size_type size) noexcept : m_data(size) {}
 
-    constexpr stack(std::initializer_list<T> ilist) noexcept :
-        m_data{htps::move(ilist)}
-    {}
+    constexpr stack(std::initializer_list<T> ilist) noexcept : m_data{ilist} {}
 
     constexpr stack(const stack& other)                = default;
     constexpr stack(stack&& other) noexcept            = default;
     constexpr stack& operator=(const stack& other)     = default;
     constexpr stack& operator=(stack&& other) noexcept = default;
+
+    constexpr void reserve(size_type const capacity) const
+    {
+        return m_data.reserve(capacity);
+    }
 
     constexpr size_type capacity() const noexcept { return m_data.capacity(); }
     constexpr size_type size() const noexcept { return m_data.size(); }

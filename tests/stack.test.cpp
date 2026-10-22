@@ -121,6 +121,104 @@ TEST_CASE("stack::non copyable class")
     CHECK(dummy.empty());
 }
 
+TEST_CASE("stack::copy")
+{
+    stack<sptr<int>> dummy{msptr<int>(3), msptr<int>(4), msptr<int>(5)};
+    stack<sptr<int>> dummy2{dummy};
+    CHECK(dummy.size() == 3U);
+    CHECK(dummy2.size() == 3U);
+
+    CHECK(dummy.top() == dummy2.top());
+    dummy.clear();
+    CHECK(dummy.empty());
+
+    dummy = dummy2;
+    CHECK(dummy.size() == 3U);
+    CHECK(dummy2.size() == 3U);
+    CHECK(dummy.top() == dummy2.top());
+}
+
+TEST_CASE("stack::move")
+{
+    SECTION("Copyable class")
+    {
+        stack<sptr<int>> dummy{msptr<int>(3), msptr<int>(4), msptr<int>(5)};
+        stack<sptr<int>> dummy2{dummy};
+        stack<sptr<int>> dummy3{dummy};
+        stack<sptr<int>> dummy4{move(dummy3)};
+
+        CHECK(dummy.size() == 3U);
+        CHECK(dummy2.size() == 3U);
+        CHECK(dummy3.empty());
+        CHECK(dummy4.size() == 3U);
+
+        CHECK(dummy.top() == dummy2.top());
+        dummy.clear();
+        CHECK(dummy.empty());
+
+        dummy = move(dummy2);
+        CHECK(dummy.size() == 3U);
+        CHECK(dummy2.empty());
+        CHECK(dummy == dummy4);
+        CHECK_FALSE(dummy2 == dummy4);
+        CHECK_FALSE(dummy3 == dummy4);
+    }
+
+    SECTION("Movable class")
+    {
+        stack<uptr<int>> dummy;
+        dummy.push_back(muptr<int>(3));
+        dummy.push_back(muptr<int>(4));
+        dummy.push_back(muptr<int>(5));
+        stack<uptr<int>> dummy2{move(dummy)};
+        stack<uptr<int>> dummy3;
+        dummy3.push_back(muptr<int>(3));
+        dummy3.push_back(muptr<int>(4));
+        dummy3.push_back(muptr<int>(5));
+        stack<uptr<int>> dummy4;
+
+        CHECK(dummy2.size() == 3U);
+        CHECK(dummy.empty());
+        CHECK(dummy3.size() == 3U);
+        CHECK(dummy4.empty());
+
+        dummy = move(dummy2);
+        CHECK(dummy.size() == 3U);
+        CHECK(*(dummy.ctop()) == 5);
+        dummy.pop_back();
+        CHECK(dummy.size() == 2U);
+        CHECK(*(dummy.ctop()) == 4);
+        dummy.pop_back();
+        CHECK(dummy.size() == 1U);
+        CHECK(*(dummy.ctop()) == 3);
+        dummy.pop_back();
+        CHECK(dummy.empty());
+    }
+}
+
+TEST_CASE("stack::swap")
+{
+    stack<uptr<int>> dummy;
+    dummy.push_back(muptr<int>(3));
+    dummy.push_back(muptr<int>(4));
+    dummy.push_back(muptr<int>(5));
+
+    stack<uptr<int>> dummy2;
+    dummy2.swap(dummy);
+    CHECK(dummy.empty());
+    CHECK_FALSE(dummy2.empty());
+    CHECK(dummy2.size() == 3U);
+    CHECK(*(dummy2.ctop()) == 5);
+    dummy2.pop_back();
+    CHECK(dummy2.size() == 2U);
+    CHECK(*(dummy2.ctop()) == 4);
+    dummy2.pop_back();
+    CHECK(dummy2.size() == 1U);
+    CHECK(*(dummy2.ctop()) == 3);
+    dummy2.pop_back();
+    CHECK(dummy2.empty());
+}
+
 TEST_CASE("stack::operator==")
 {
     stack<int> object_0;
@@ -157,7 +255,7 @@ TEST_CASE("stack::operator==")
 TEST_CASE("stack of shared pointers")
 {
     stack<sptr<int>> dummy{msptr<int>(3), msptr<int>(4), msptr<int>(5)};
-    CHECK(dummy.size() == 3);
+    CHECK(dummy.size() == 3U);
     sptr result = move(dummy.back());
     CHECK(*result == 5);
     dummy.pop_back();
