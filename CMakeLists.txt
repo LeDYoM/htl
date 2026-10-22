@@ -32,13 +32,14 @@ target_sources(${target}
   PUBLIC
   FILE_SET CXX_MODULES
   FILES
-  src/shared_ptr/counter.cppm
-  src/shared_ptr/managed_pointer.cppm
-  src/array.cppm
   src/memory/allocator_malloc_free.cppm
   src/memory/allocator_type.cppm
   src/memory/allocatorfunc.cppm
   src/memory/placement.cppm
+  src/smart_pointers/counter.cppm
+  src/smart_pointers/managed_pointer.cppm
+  src/smart_pointers/shared_ptr.cppm
+  src/array.cppm
   src/algoutils.cppm
   src/basic_dictionary.cppm
   src/basic_str.cppm
@@ -55,7 +56,6 @@ target_sources(${target}
   src/p_impl_pointer.cppm
   src/pair.cppm
   src/raw_memory.cppm
-  src/shared_ptr.cppm
   src/span.cppm
   src/stack.cppm
   src/str_functions.cppm
