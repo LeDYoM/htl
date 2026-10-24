@@ -22,9 +22,6 @@ list(APPEND CMAKE_MODULE_PATH ${cmake_ledyom_utils_SOURCE_DIR})
 
 include(c_l_u_a)
 
-# Finish common part
-setup_common()
-
 set(target htl)
 add_library(${target} STATIC)
 
