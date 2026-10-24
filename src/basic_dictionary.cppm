@@ -28,16 +28,15 @@ public:
     /**
      * @brief  Default constructor
      */
-    [[nodiscard]] constexpr BasicDictionary() noexcept = default;
+    constexpr BasicDictionary() noexcept = default;
 
-    [[nodiscard]] constexpr BasicDictionary(
-        std::initializer_list<element> eList) :
+    constexpr BasicDictionary(std::initializer_list<element> eList) :
         data_{htps::move(eList)}
     {}
 
-    [[nodiscard]] constexpr BasicDictionary(const content& eList) :
-        data_{htps::move(eList)}
-    {}
+    constexpr BasicDictionary(const content& eList) : data_{eList} {}
+
+    constexpr BasicDictionary(content&& eList) noexcept : data_{move(eList)} {}
 
     [[nodiscard]] constexpr iterator begin() noexcept { return data_.begin(); }
     [[nodiscard]] constexpr const_iterator begin() const noexcept

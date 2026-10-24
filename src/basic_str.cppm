@@ -39,19 +39,19 @@ public:
     using size_type = vector<char_type>::size_type;
 
 private:
-    vector<char_type> data_;
+    vector<char_type> m_data;
 
 public:
     constexpr basic_str() noexcept = default;
 
     template <size_type N>
-    constexpr basic_str(char_type const (&a)[N]) : data_(a, N)
+    constexpr basic_str(char_type const (&a)[N]) : m_data(a, N)
     {}
 
-    explicit constexpr basic_str(size_type const size) : data_(size) {}
+    explicit constexpr basic_str(size_type const size) : m_data(size) {}
 
     constexpr basic_str(const_iterator const n, size_type const N) :
-        data_(n, N + 1)
+        m_data(n, N + 1)
     {}
 
     constexpr explicit basic_str(basic_str_view<char_type> other) :
@@ -80,14 +80,14 @@ public:
     basic_str& operator=(char_type const* const n)
     {
         auto const len{strnlen(n)};
-        if (len < data_.capacity())
+        if (len < m_data.capacity())
         {
-            data_.resize(len + 1);
+            m_data.resize(len + 1);
             for (decltype(strnlen(n)) i{0U}; i < len; ++i)
             {
-                data_[i] = n[i];
+                m_data[i] = n[i];
             }
-            data_[len] = static_cast<char_type>(0);
+            m_data[len] = static_cast<char_type>(0);
         }
         else
         {
@@ -98,7 +98,7 @@ public:
 
     constexpr void reserve(size_type const capacity)
     {
-        data_.reserve(capacity);
+        m_data.reserve(capacity);
     }
 
     [[nodiscard]] basic_str_view<char_type> to_view() const noexcept
@@ -106,7 +106,7 @@ public:
         return basic_str_view<char_type>{cbegin(), size()};
     }
 
-    void swap(basic_str& other) { data_.swap(other.data_); }
+    void swap(basic_str& other) { m_data.swap(other.m_data); }
 
     static basic_str fromCharAndSize(char_type const ch, size_type const size)
     {
@@ -140,7 +140,7 @@ public:
     static basic_str to_str(f64 const n) { return convert_to_imp(n); }
 
     template <typename T>
-    requires std::is_default_constructible_v<T>
+        requires std::is_default_constructible_v<T>
     bool is() const
     {
         T temp;
@@ -243,15 +243,15 @@ public:
         basic_str temp;
         while (start < size() && len > 0U)
         {
-            if (data_[start] != 0)
+            if (m_data[start] != 0)
             {
-                temp.data_.push_back(data_[start]);
+                temp.m_data.push_back(m_data[start]);
             }
             ++start;
             --len;
         }
 
-        temp.data_.push_back(0);
+        temp.m_data.push_back(0);
         return temp;
     }
 
@@ -259,15 +259,15 @@ public:
 
     basic_str& append(basic_str const& n)
     {
-        data_.pop_back();
-        data_.insert(n.data_);
+        m_data.pop_back();
+        m_data.insert(n.m_data);
         return *this;
     }
 
     basic_str& append(basic_str&& n)
     {
-        data_.pop_back();
-        data_.insert(htps::move(n.data_));
+        m_data.pop_back();
+        m_data.insert(htps::move(n.m_data));
         return *this;
     }
 
@@ -381,7 +381,7 @@ public:
 
     constexpr size_type size() const noexcept
     {
-        return data_.empty() ? 0 : (data_.size() - 1U);
+        return m_data.empty() ? 0 : (m_data.size() - 1U);
     }
 
     void ltrim()
@@ -390,29 +390,29 @@ public:
         {
             for (size_type index{0U}; index < size(); ++index)
             {
-                if (!std::isspace(static_cast<char_type>(data_[index])))
+                if (!std::isspace(static_cast<char_type>(m_data[index])))
                 {
                     *this = substr(index);
                     return;
                 }
             }
-            data_.clear();
+            m_data.clear();
         }
     }
 
     constexpr void clear() noexcept
     {
-        if (!data_.empty())
+        if (!m_data.empty())
         {
-            data_[0] = static_cast<char_type>(0);
+            m_data[0] = static_cast<char_type>(0);
         }
-        data_.clear();
+        m_data.clear();
     }
 
     constexpr size_type cfind(char_type const ch) const noexcept
     {
-        const auto it(data_.cfind(ch));
-        return ((it == data_.cend()) ? npos : std::distance(cbegin(), it));
+        const auto it(m_data.cfind(ch));
+        return ((it == m_data.cend()) ? npos : std::distance(cbegin(), it));
     }
 
     constexpr size_type cfind(basic_str const& other) const noexcept
@@ -423,8 +423,8 @@ public:
             while (next_start != cend())
             {
                 auto const it_start{
-                    data_.cfind(next_start, data_.cend(), *other.begin())};
-                bool continue_inner{it_start != data_.cend()};
+                    m_data.cfind(next_start, m_data.cend(), *other.begin())};
+                bool continue_inner{it_start != m_data.cend()};
                 if (continue_inner)
                 {
                     auto it_end{it_start + 1};
@@ -458,14 +458,14 @@ public:
 
     constexpr size_type find(char_type const ch) const noexcept
     {
-        if (data_.empty())
+        if (m_data.empty())
         {
             return npos;
         }
         else
         {
-            auto const it{data_.cfind(data_.cbegin(), &(data_.back()), ch)};
-            return ((it == &data_.back()) ? npos : std::distance(cbegin(), it));
+            auto const it{m_data.cfind(m_data.cbegin(), &(m_data.back()), ch)};
+            return ((it == &m_data.back()) ? npos : std::distance(cbegin(), it));
         }
     }
 
@@ -481,14 +481,14 @@ public:
         {
             for (size_type index{size() - 1U}; index > 0U; --index)
             {
-                if (!std::isspace(static_cast<unsigned char>(data_[index])))
+                if (!std::isspace(static_cast<unsigned char>(m_data[index])))
                 {
                     *this = substr(0U, index + 1U);
                     return;
                 }
             }
 
-            *this = (std::isspace(static_cast<unsigned char>(data_[0U])))
+            *this = (std::isspace(static_cast<unsigned char>(m_data[0U])))
                 ? ""
                 : substr(0U, 1U);
         }
@@ -505,45 +505,45 @@ public:
     // using vector<T>::begin();
     [[nodiscard]] constexpr reference operator[](size_type const index) noexcept
     {
-        return data_[index];
+        return m_data[index];
     }
 
     [[nodiscard]] constexpr const_reference operator[](
         size_type const index) const noexcept
     {
-        return data_[index];
+        return m_data[index];
     }
 
     [[nodiscard]] constexpr size_type capacity() const noexcept
     {
-        return data_.capacity();
+        return m_data.capacity();
     }
-    [[nodiscard]] constexpr iterator begin() noexcept { return data_.begin(); }
+    [[nodiscard]] constexpr iterator begin() noexcept { return m_data.begin(); }
     [[nodiscard]] constexpr const_iterator begin() const noexcept
     {
-        return data_.begin();
+        return m_data.begin();
     }
     [[nodiscard]] constexpr const_iterator cbegin() const noexcept
     {
-        return data_.cbegin();
+        return m_data.cbegin();
     }
     [[nodiscard]] constexpr iterator end() noexcept
     {
-        return data_.begin() + size();
+        return m_data.begin() + size();
     }
     [[nodiscard]] constexpr const_iterator end() const noexcept
     {
-        return data_.begin() + size();
+        return m_data.begin() + size();
     }
 
     [[nodiscard]] constexpr const_iterator cend() const noexcept
     {
-        return data_.cbegin() + size();
+        return m_data.cbegin() + size();
     }
 
     [[nodiscard]] constexpr char_type const* c_str() const noexcept
     {
-        return data_.empty() ? "" : data_.cbegin();
+        return m_data.empty() ? "" : m_data.cbegin();
     }
 
     [[nodiscard]] constexpr bool empty() const noexcept { return size() == 0U; }
@@ -551,51 +551,51 @@ public:
     [[nodiscard]] constexpr auto find_first_of(
         vector<char_type> const& chValue) const noexcept
     {
-        auto const it{data_.cfind_first_of(chValue)};
-        return (it == data_.cend()) ? basic_str::npos
+        auto const it{m_data.cfind_first_of(chValue)};
+        return (it == m_data.cend()) ? basic_str::npos
                                     : std::distance(cbegin(), it);
     }
 
     [[nodiscard]] constexpr auto find_first_of(
         char_type const chValue) const noexcept
     {
-        auto const it{data_.find_first_of(chValue)};
-        return (it == data_.cend()) ? basic_str::npos
+        auto const it{m_data.find_first_of(chValue)};
+        return (it == m_data.cend()) ? basic_str::npos
                                     : std::distance(cbegin(), it);
     }
 
     [[nodiscard]] constexpr auto find_first_of(
         basic_str const value) const noexcept
     {
-        auto value_data_copy{value.data_};
+        auto value_data_copy{value.m_data};
         value_data_copy.pop_back();
-        auto const it{data_.find_first_of(value_data_copy)};
-        return (it == data_.cend()) ? basic_str::npos
+        auto const it{m_data.find_first_of(value_data_copy)};
+        return (it == m_data.cend()) ? basic_str::npos
                                     : std::distance(cbegin(), it);
     }
 
     constexpr auto find_last_of(vector<char_type> const& chValue) const noexcept
     {
-        auto const it{data_.find_last_of(chValue)};
-        return (it == data_.cend()) ? basic_str::npos
+        auto const it{m_data.find_last_of(chValue)};
+        return (it == m_data.cend()) ? basic_str::npos
                                     : std::distance(cbegin(), it);
     }
 
     [[nodiscard]] constexpr auto find_last_of(
         char_type const chValue) const noexcept
     {
-        auto const it{data_.find_last_of(chValue)};
-        return (it == data_.cend()) ? basic_str::npos
+        auto const it{m_data.find_last_of(chValue)};
+        return (it == m_data.cend()) ? basic_str::npos
                                     : std::distance(cbegin(), it);
     }
 
     [[nodiscard]] constexpr auto find_last_of(
         basic_str const value) const noexcept
     {
-        auto value_data_copy{value.data_};
+        auto value_data_copy{value.m_data};
         value_data_copy.pop_back();
-        auto const it{data_.find_last_of(value_data_copy)};
-        return (it == data_.cend()) ? basic_str::npos
+        auto const it{m_data.find_last_of(value_data_copy)};
+        return (it == m_data.cend()) ? basic_str::npos
                                     : std::distance(cbegin(), it);
     }
 
@@ -622,10 +622,8 @@ public:
 
     static constexpr size_type npos{static_cast<size_type>(-1)};
 
-    [[nodiscard]] constexpr bool operator==(basic_str const& rhs) const noexcept
-    {
-        return data_ == rhs.data_;
-    }
+    [[nodiscard]] constexpr bool operator==(
+        basic_str const& rhs) const noexcept = default;
 
     [[nodiscard]] constexpr bool operator==(
         char_type const* const rhs) const noexcept
@@ -633,7 +631,7 @@ public:
         size_type counter{0U};
         for (; counter < size() && rhs[counter] != 0U; ++counter)
         {
-            if (data_[counter] != rhs[counter])
+            if (m_data[counter] != rhs[counter])
             {
                 return false;
             }
@@ -653,11 +651,11 @@ public:
     {
         for (size_type i{0U}; i < size() && i < rhs.size(); ++i)
         {
-            if (data_[i] < rhs[i])
+            if (m_data[i] < rhs[i])
             {
                 return std::strong_ordering::less;
             }
-            else if (data_[i] > rhs[i])
+            else if (m_data[i] > rhs[i])
             {
                 return std::strong_ordering::greater;
             }
