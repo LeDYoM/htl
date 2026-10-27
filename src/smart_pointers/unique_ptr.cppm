@@ -29,14 +29,14 @@ public:
     uptr& operator=(uptr<U> const&) = delete;
 
     constexpr uptr(uptr&& other) noexcept :
-        m_pointer{htps::move(other.m_pointer)}
+        m_pointer{move(other.m_pointer)}
     {
         other.m_pointer = nullptr;
     }
 
     template <typename U>
     constexpr uptr(uptr<U>&& other) noexcept :
-        m_pointer{htps::move(other.m_pointer)}
+        m_pointer{move(other.m_pointer)}
     {
         other.m_pointer = nullptr;
     }
@@ -45,7 +45,7 @@ public:
     {
         auto tmp{m_pointer};
         m_pointer       = other.m_pointer;
-        other.m_pointer = htps::move(tmp);
+        other.m_pointer = move(tmp);
         return *this;
     }
 
@@ -57,7 +57,7 @@ public:
 
     [[nodiscard]] constexpr T* release() noexcept
     {
-        auto tmp{htps::move(m_pointer)};
+        auto tmp{move(m_pointer)};
         m_pointer = nullptr;
         return tmp;
     }
@@ -65,7 +65,7 @@ public:
     constexpr void reset(T* newValue) noexcept
     {
         reset();
-        m_pointer = htps::move(newValue);
+        m_pointer = move(newValue);
     }
 
     constexpr void reset() noexcept
@@ -98,13 +98,6 @@ private:
 };
 
 export template <typename T>
-[[nodiscard]] constexpr bool operator==(uptr<T> const& lhs,
-                                        const T* const rhs) noexcept
-{
-    return lhs.get() == rhs;
-}
-
-export template <typename T>
 [[nodiscard]] constexpr bool operator==(uptr<T> const& lhs, nullptr_t) noexcept
 {
     return lhs.get() == nullptr;
@@ -119,11 +112,11 @@ export template <typename T>
 export template <typename T, typename... Args>
 [[nodiscard]] uptr<T> muptr(Args&&... args)
 {
-    T* p{AllocatorType<T>::make_one(htps::forward<Args>(args)...)};
-    return uptr<T>{htps::move(p)};
+    T* p{AllocatorType<T>::make_one(forward<Args>(args)...)};
+    return uptr<T>{move(p)};
 }
 
-static_assert(!std::copy_constructible<htps::uptr<htps::s32>>);
-static_assert(std::move_constructible<htps::uptr<htps::s32>>);
+static_assert(!std::copy_constructible<uptr<s32>>);
+static_assert(std::move_constructible<uptr<s32>>);
 
 }  // namespace htps

@@ -17,7 +17,7 @@ TEST_CASE("unique_ptr::unique_ptr", "[types][unique_ptr]")
         SECTION("nullptr constructor")
         {
             uptr<int> a{nullptr};
-            uptr<int> b{htps::move(a)};
+            uptr<int> b{move(a)};
             CHECK(b == nullptr);
         }
     }
@@ -29,10 +29,10 @@ TEST_CASE("unique_ptr::unique_ptr", "[types][unique_ptr]")
             int* p{new int{42}};
 
             {
-                uptr<int> a{htps::move(p)};
+                uptr<int> a{move(p)};
                 CHECK(*a == 42);
                 {
-                    uptr<int> b{htps::move(a)};
+                    uptr<int> b{move(a)};
                     CHECK(a == nullptr);
                     CHECK(*b == 42);
                 }
@@ -44,7 +44,7 @@ TEST_CASE("unique_ptr::unique_ptr", "[types][unique_ptr]")
             uptr<int> a{new int{42}};
             CHECK(*a == 42);
             {
-                uptr<int> b{htps::move(a)};
+                uptr<int> b{move(a)};
                 CHECK(a == nullptr);
                 CHECK(*b == 42);
             }
@@ -58,7 +58,7 @@ TEST_CASE("unique_ptr move constructors", "[types][unique_ptr]")
     {
         uptr<int> a;
         CHECK(a == nullptr);
-        uptr<int> b{htps::move(a)};
+        uptr<int> b{move(a)};
         CHECK(a == nullptr);
         CHECK(b == nullptr);
     }
@@ -67,7 +67,7 @@ TEST_CASE("unique_ptr move constructors", "[types][unique_ptr]")
     {
         uptr<int> a{new int{42}};
         CHECK(*a == 42);
-        sptr<int> b{htps::move(a)};
+        sptr<int> b{move(a)};
         CHECK(a == nullptr);
         CHECK(*b == 42);
     }
@@ -79,13 +79,13 @@ TEST_CASE("unique_ptr move assignment", "[types][unique_ptr]")
     {
         uptr<int> a;
         CHECK(a == nullptr);
-        uptr<int> b{htps::move(a)};
+        uptr<int> b{move(a)};
         CHECK(a == nullptr);
         CHECK(b == nullptr);
 
         uptr<int> c{new int{42}};
         CHECK(*c == 42);
-        a = htps::move(c);
+        a = move(c);
         CHECK(*a == 42);
         CHECK(c == nullptr);
     }
@@ -94,13 +94,13 @@ TEST_CASE("unique_ptr move assignment", "[types][unique_ptr]")
     {
         uptr<int> a{new int{42}};
         CHECK(*a == 42);
-        uptr<int> b{htps::move(a)};
+        uptr<int> b{move(a)};
         CHECK(a == nullptr);
         CHECK(*b == 42);
 
         uptr<int> c{new int{42}};
         CHECK(*c == 42);
-        a = htps::move(c);
+        a = move(c);
         CHECK(*a == 42);
         CHECK(c == nullptr);
 
@@ -124,7 +124,7 @@ TEST_CASE("shared_ptr with unique_ptr", "[types][unique_ptr][shared_ptr]")
     SECTION("Construct sptr from uptr")
     {
         uptr<int> a{new int{42}};
-        sptr<int> b{htps::move(a)};
+        sptr<int> b{move(a)};
         CHECK(a == nullptr);
         CHECK(b.use_count() == 1U);
     }
@@ -134,7 +134,7 @@ TEST_CASE("shared_ptr with unique_ptr", "[types][unique_ptr][shared_ptr]")
         uptr<int> a{new int{42}};
         sptr<int> b;
         CHECK(b.use_count() == 0U);
-        b = htps::move(a);
+        b = move(a);
         CHECK(a == nullptr);
         CHECK(b.use_count() == 1U);
     }
@@ -166,9 +166,9 @@ void set(uptr<Base> base) noexcept
 TEST_CASE("unique_ptr from base", "[types][unique_ptr]")
 {
     uptr<Base> b{muptr<Derived>(1, 2)};
-    set(htps::move(b));
+    set(move(b));
     set(muptr<Derived>(1, 2));
     uptr<Derived> c{muptr<Derived>(1, 2)};
-    set(htps::move(c));
+    set(move(c));
     set(muptr<Base>(2));
 }

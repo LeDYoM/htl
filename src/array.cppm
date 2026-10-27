@@ -11,6 +11,7 @@ export module htypes:array;
 import :btypes;
 import :span;
 import :weak_ptr;
+import :algos;
 
 namespace htps
 {
@@ -30,14 +31,16 @@ public:
 
     constexpr array(std::initializer_list<value_type> iList) noexcept
     {
-        //        static_assert(iList.size() <= array_size);
         auto buffer_element{&buffer_[0]};
 
+        // Copy everything from initializer list
         for (auto&& element : iList)
         {
-            (*buffer_element++) = htps::move(element);
+            (*buffer_element++) = element;
         }
 
+        // If after copying from initializer list there are still free places,
+        // expand the last element of the list and fill the free places.
         if (iList.size() < array_size && iList.size() > 0U)
         {
             size_t counter{iList.size()};
@@ -77,9 +80,9 @@ public:
             for (size_type i{array_size - 2U};
                  i >= index && (i < static_cast<size_type>(-1)); --i)
             {
-                buffer_[i + 1] = htps::move(buffer_[i]);
+                buffer_[i + 1] = move(buffer_[i]);
             }
-            buffer_[index] = htps::move(element);
+            buffer_[index] = move(element);
         }
     }
 
@@ -164,7 +167,7 @@ export template <class T, size_type array_size>
     array<T, array_size> const& lhs,
     array<T, array_size> const& rhs) noexcept
 {
-    return std::equal(lhs.cbegin(), lhs.cend(), rhs.cbegin());
+    return equal(lhs.cbegin(), lhs.cend(), rhs.cbegin());
 }
 
 export template <typename T, size_type S>

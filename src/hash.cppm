@@ -82,13 +82,13 @@ export struct Hasher
     }
 };
 
-export template <htps::str_literal Str>
+export template <str_literal Str>
 struct StringHash
 {
     static constexpr u32 value{Hasher::hash(Str)};
 };
 
-export template <htps::str_literal Str>
+export template <str_literal Str>
 inline constexpr u32 StringHash_v{StringHash<Str>::value};
 
 }  // namespace htps

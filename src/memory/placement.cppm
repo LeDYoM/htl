@@ -30,13 +30,13 @@ public:
      */
     template <typename... Args>
     static constexpr void construct(pointer where, Args&&... args) noexcept(
-        noexcept(T(htps::forward<Args>(args)...)))
+        noexcept(T(forward<Args>(args)...)))
     {
         assert(where != nullptr);
 
         if constexpr (sizeof...(args) > 0U)
         {
-            ::new (static_cast<void*>(where)) T(htps::forward<Args>(args)...);
+            ::new (static_cast<void*>(where)) T(forward<Args>(args)...);
         }
         else
         {

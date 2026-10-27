@@ -65,14 +65,14 @@ public:
     template <typename... Args>
     constexpr void emplace_back(Args&&... args)
     {
-        m_data.emplace_back(htps::forward<Args>(args)...);
+        m_data.emplace_back(forward<Args>(args)...);
     }
 
     constexpr void shrink_to_fit() { m_data.shrink_to_fit(); }
 
     constexpr void push_back(const T& value) { m_data.push_back(value); }
 
-    constexpr void push_back(T&& value) { m_data.push_back(htps::move(value)); }
+    constexpr void push_back(T&& value) { m_data.push_back(move(value)); }
 
     constexpr void pop_back() noexcept { m_data.pop_back(); }
 

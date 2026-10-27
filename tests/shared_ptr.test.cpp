@@ -32,7 +32,7 @@ TEST_CASE("shared_ptr::shared_ptr", "[types][shared_ptr]")
             int* p{new int{42}};
 
             {
-                sptr<int> a{htps::move(p)};
+                sptr<int> a{move(p)};
                 CHECK(*a == 42);
                 CHECK(a.use_count() == 1U);
                 {
@@ -68,7 +68,7 @@ TEST_CASE("shared_ptr move constructors", "[types][shared_ptr]")
     {
         sptr<int> a;
         CHECK(a.use_count() == 0U);
-        sptr<int> b{htps::move(a)};
+        sptr<int> b{move(a)};
         CHECK(a.use_count() == 0U);
         CHECK(b.use_count() == 0U);
     }
@@ -78,7 +78,7 @@ TEST_CASE("shared_ptr move constructors", "[types][shared_ptr]")
         sptr<int> a{new int{42}};
         CHECK(*a == 42);
         CHECK(a.use_count() == 1U);
-        sptr<int> b{htps::move(a)};
+        sptr<int> b{move(a)};
         CHECK(a.use_count() == 0U);
         CHECK(b.use_count() == 1U);
     }
@@ -91,13 +91,13 @@ TEST_CASE("shared_ptr move assignment", "[types][shared_ptr]")
         sptr<int> a;
         CHECK(a.use_count() == 0U);
         sptr<int> b;
-        b = htps::move(a);
+        b = move(a);
         CHECK(a.use_count() == 0U);
         CHECK(b.use_count() == 0U);
 
         sptr<int> c{new int{42}};
         CHECK(c.use_count() == 1U);
-        a = htps::move(c);
+        a = move(c);
         CHECK(a.use_count() == 1U);
         CHECK(c.use_count() == 0U);
     }
@@ -109,7 +109,7 @@ TEST_CASE("shared_ptr move assignment", "[types][shared_ptr]")
             CHECK(*a == 42);
             CHECK(a.use_count() == 1U);
             sptr<int> b;
-            b = htps::move(a);
+            b = move(a);
             CHECK(a.use_count() == 0U);
             CHECK(b.use_count() == 1U);
         }
@@ -118,7 +118,7 @@ TEST_CASE("shared_ptr move assignment", "[types][shared_ptr]")
             sptr<int> c{new int{42}};
             CHECK(c.use_count() == 1U);
             sptr<int> a;
-            a = htps::move(c);
+            a = move(c);
             CHECK(a.use_count() == 1U);
             CHECK(c.use_count() == 0U);
         }
@@ -131,7 +131,7 @@ TEST_CASE("shared_ptr copy assignment", "[types][shared_ptr]")
     {
         sptr<int> a;
         CHECK(a.use_count() == 0U);
-        sptr<int> b{htps::move(a)};
+        sptr<int> b{move(a)};
         CHECK(a.use_count() == 0U);
         CHECK(b.use_count() == 0U);
 
@@ -146,7 +146,7 @@ TEST_CASE("shared_ptr copy assignment", "[types][shared_ptr]")
         sptr<int> a{new int{42}};
         CHECK(*a == 42);
         CHECK(a.use_count() == 1U);
-        sptr<int> b{htps::move(a)};
+        sptr<int> b{move(a)};
         CHECK(a.use_count() == 0U);
         CHECK(b.use_count() == 1U);
 
@@ -195,7 +195,7 @@ TEST_CASE("shared_ptr leak testing", "[types][shared_ptr]")
     CHECK(a.use_count() == 1U);
     CHECK(b.use_count() == 1U);
 
-    a = htps::move(b);
+    a = move(b);
     CHECK(*a == 42);
     CHECK(a.use_count() == 1U);
     b.reset();
@@ -203,7 +203,7 @@ TEST_CASE("shared_ptr leak testing", "[types][shared_ptr]")
 
     a = sptr<int>{nullptr};
     CHECK(a.use_count() == 0U);
-    a = htps::move(b);
+    a = move(b);
     CHECK(a.use_count() == 0U);
     CHECK(b.use_count() == 0U);
 
@@ -271,13 +271,13 @@ TEST_CASE("shared_ptr dynamic_pointer_cast", "[types][shared_ptr]")
         CHECK(base_ptr.use_count() == 1U);
 
         sptr<Derived> derived_ptr;
-        derived_ptr = dynamic_pointer_cast<Derived>(htps::move(base_ptr));
+        derived_ptr = dynamic_pointer_cast<Derived>(move(base_ptr));
         CHECK(derived_ptr == nullptr);
         CHECK(derived_ptr.use_count() == 0U);
 
         base_ptr = msptr<Derived>(12, 48);
         CHECK(base_ptr->a == 12);
-        derived_ptr = dynamic_pointer_cast<Derived>(htps::move(base_ptr));
+        derived_ptr = dynamic_pointer_cast<Derived>(move(base_ptr));
         CHECK(base_ptr == nullptr);
         CHECK(derived_ptr != nullptr);
         CHECK(derived_ptr->a == 12);
@@ -318,13 +318,13 @@ TEST_CASE("shared_ptr static_pointer_cast", "[types][shared_ptr]")
         CHECK(base_ptr.use_count() == 1U);
 
         sptr<Derived> derived_ptr;
-        derived_ptr = static_pointer_cast<Derived>(htps::move(base_ptr));
+        derived_ptr = static_pointer_cast<Derived>(move(base_ptr));
         CHECK(derived_ptr != nullptr);
         CHECK(derived_ptr.use_count() == 1U);
 
         base_ptr = msptr<Derived>(12, 48);
         CHECK(base_ptr->a == 12);
-        derived_ptr = static_pointer_cast<Derived>(htps::move(base_ptr));
+        derived_ptr = static_pointer_cast<Derived>(move(base_ptr));
         CHECK(base_ptr == nullptr);
         CHECK(derived_ptr != nullptr);
         CHECK(derived_ptr->a == 12);
@@ -386,7 +386,7 @@ TEST_CASE("shared_ptr move another shared_ptr to base", "[types][shared_ptr]")
 {
     sptr<B> ab1{msptr<AB>()};
     sptr<B> ab2{msptr<AB>()};
-    ab2 = htps::move(ab1);
+    ab2 = move(ab1);
     CHECK(ab1.use_count() == 1U);
     CHECK(ab1 != nullptr);
     CHECK(ab2.use_count() == 1U);
@@ -417,7 +417,7 @@ TEST_CASE("shared_ptr move another shared_ptr to base different types",
 {
     sptr<B> ab1{msptr<AB>()};
     sptr<B> ab2{msptr<AB>()};
-    ab2 = htps::move(ab1);
+    ab2 = move(ab1);
     CHECK(ab1.use_count() == 1U);
     CHECK(ab1 != nullptr);
     CHECK(ab2.use_count() == 1U);

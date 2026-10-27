@@ -87,12 +87,12 @@ public:
 
         if (it == data_.end())
         {
-            data_.emplace_back(htps::move(key), htps::move(value));
+            data_.emplace_back(move(key), move(value));
             return true;
         }
         else if (overwrite)
         {
-            (*it) = element(htps::move(key), htps::move(value));
+            (*it) = element(move(key), move(value));
             return true;
         }
         return false;
@@ -102,7 +102,7 @@ public:
                        T value,
                        const bool overwrite = true)
     {
-        (void)(add(htps::move(key), htps::move(value), overwrite));
+        (void)(add(move(key), move(value), overwrite));
         return *this;
     }
 

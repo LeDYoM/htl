@@ -22,7 +22,7 @@ public:
 
     constexpr sptr(nullptr_t) noexcept : m_ptr{nullptr}, m_counter{nullptr} {}
 
-    constexpr explicit sptr(T* ptr) : m_ptr{htps::move(ptr)}
+    constexpr explicit sptr(T* ptr) : m_ptr{move(ptr)}
     {
         if (m_ptr != nullptr)
         {
@@ -33,7 +33,7 @@ public:
     }
 
     constexpr sptr(sptr&& sp) noexcept :
-        sptr{htps::move(sp.m_ptr), htps::move(sp.m_counter)}
+        sptr{move(sp.m_ptr), move(sp.m_counter)}
     {
         sp.m_ptr     = nullptr;
         sp.m_counter = nullptr;
@@ -75,12 +75,12 @@ public:
     {
         if (this != &sp)
         {
-            auto tmp_ptr{htps::move(sp.m_ptr)};
-            auto tmp_counter{htps::move(sp.m_counter)};
-            sp.m_ptr     = htps::move(m_ptr);
-            sp.m_counter = htps::move(m_counter);
-            m_ptr        = htps::move(tmp_ptr);
-            m_counter    = htps::move(tmp_counter);
+            auto tmp_ptr{move(sp.m_ptr)};
+            auto tmp_counter{move(sp.m_counter)};
+            sp.m_ptr     = move(m_ptr);
+            sp.m_counter = move(m_counter);
+            m_ptr        = move(tmp_ptr);
+            m_counter    = move(tmp_counter);
         }
         return *this;
     }
@@ -88,12 +88,12 @@ public:
     template <typename T2>
     constexpr sptr& operator=(sptr<T2>&& sp) noexcept
     {
-        T* tmp_ptr{htps::move(static_cast<T*>(sp.m_ptr))};
-        auto tmp_counter{htps::move(sp.m_counter)};
-        sp.m_ptr     = htps::move(static_cast<T2*>(m_ptr));
-        sp.m_counter = htps::move(m_counter);
-        m_ptr        = htps::move(tmp_ptr);
-        m_counter    = htps::move(tmp_counter);
+        T* tmp_ptr{move(static_cast<T*>(sp.m_ptr))};
+        auto tmp_counter{move(sp.m_counter)};
+        sp.m_ptr     = move(static_cast<T2*>(m_ptr));
+        sp.m_counter = move(m_counter);
+        m_ptr        = move(tmp_ptr);
+        m_counter    = move(tmp_counter);
         return *this;
     }
 
@@ -123,7 +123,7 @@ public:
 
     constexpr sptr& operator=(T*&& ptr) noexcept
     {
-        *this = sptr{htps::move(ptr)};
+        *this = sptr{move(ptr)};
         return *this;
     }
 
@@ -144,9 +144,9 @@ public:
 
     constexpr void swap(sptr& other) noexcept
     {
-        sptr _other{htps::move(other)};
-        other = htps::move(*this);
-        *this = htps::move(_other);
+        sptr _other{move(other)};
+        other = move(*this);
+        *this = move(_other);
     }
 
     [[nodiscard]] constexpr u32 use_count() const noexcept
@@ -186,7 +186,7 @@ public:
 
 private:
     constexpr sptr(T* sp, shptr_detail::counter* cnt) noexcept :
-        m_ptr{htps::move(sp)}, m_counter{htps::move(cnt)}
+        m_ptr{move(sp)}, m_counter{move(cnt)}
     {}
 
     template <typename T2>
@@ -215,8 +215,8 @@ export template <typename T, typename... Args>
 [[nodiscard]] sptr<T> msptr(Args&&... args)
 {
     auto t{AllocatorType<T>::allocate(1)};
-    AllocatorType<T>::construct(t, htps::forward<Args>(args)...);
-    return sptr<T>{htps::move(t)};
+    AllocatorType<T>::construct(t, forward<Args>(args)...);
+    return sptr<T>{move(t)};
 }
 
 export template <class T, class T2>
@@ -265,7 +265,7 @@ export template <class T, class T2>
 
         if (ptr != nullptr)
         {
-            auto result{sptr<T>{htps::move(ptr), htps::move(other.m_counter)}};
+            auto result{sptr<T>{move(ptr), move(other.m_counter)}};
             result.m_counter->increment();
             return result;
         }
@@ -286,7 +286,7 @@ export template <class T, class T2>
             auto tmp_counter{other.m_counter};
             other.m_counter = nullptr;
             other.m_ptr     = nullptr;
-            return sptr<T>{htps::move(ptr), htps::move(tmp_counter)};
+            return sptr<T>{move(ptr), move(tmp_counter)};
         }
     }
 

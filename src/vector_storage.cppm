@@ -134,8 +134,7 @@ public:
     constexpr void push_back(T&& value)
     {
         reserve(GrowPolicy::growSize(size_));
-        Allocator::construct(static_cast<T*>(buffer_ + size_++),
-                             htps::move(value));
+        Allocator::construct(static_cast<T*>(buffer_ + size_++), move(value));
     }
 
     template <typename... Args>
@@ -143,7 +142,7 @@ public:
     {
         reserve(GrowPolicy::growSize(size_));
         Allocator::construct(static_cast<T*>(buffer_ + size_++),
-                             htps::forward<Args>(args)...);
+                             forward<Args>(args)...);
     }
 
     constexpr void pop_back() noexcept
@@ -164,10 +163,10 @@ public:
 
             for (auto&& elements_old_vector : *this)
             {
-                new_vector.push_back(htps::move(elements_old_vector));
+                new_vector.push_back(move(elements_old_vector));
             }
 
-            *this = htps::move(new_vector);
+            *this = move(new_vector);
         }
     }
 
@@ -182,16 +181,16 @@ public:
 
             for (auto it{begin()}; it < where; ++it)
             {
-                new_vector.push_back(htps::move(*it));
+                new_vector.push_back(move(*it));
             }
 
             new_vector.push_back(newElement);
 
             for (auto it{where}; it < end(); ++it)
             {
-                new_vector.push_back(htps::move(*it));
+                new_vector.push_back(move(*it));
             }
-            *this = htps::move(new_vector);
+            *this = move(new_vector);
         }
         else
         {
@@ -208,7 +207,7 @@ public:
                 {
                     for (auto it{prev_end}; it > where && it > begin(); --it)
                     {
-                        *it = std::move(*(std::prev(it)));
+                        *it = move(*(std::prev(it)));
                     }
                 }
                 *where = newElement;
@@ -227,10 +226,10 @@ public:
 
             for (auto&& elements_old_vector : *this)
             {
-                new_vector.push_back(htps::move(elements_old_vector));
+                new_vector.push_back(move(elements_old_vector));
             }
 
-            *this = htps::move(new_vector);
+            *this = move(new_vector);
         }
     }
 };

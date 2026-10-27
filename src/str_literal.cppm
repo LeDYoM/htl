@@ -1,10 +1,7 @@
-module;
-
-#include <algorithm>
-
 export module htypes:str_literal;
 
 import :btypes;
+import :algos;
 
 namespace htps
 {
@@ -16,7 +13,7 @@ struct basic_str_literal
     consteval basic_str_literal(char_type const (&str)[N]) noexcept :
         m_real_size{N}
     {
-        std::copy_n(str, N, value);
+        copy_n(str, N, value);
     }
 
     constexpr size_type size() const noexcept { return m_real_size - 1U; }
@@ -46,7 +43,7 @@ struct basic_str_literal
     {
         if (size() == rhs.size())
         {
-            return std::equal(cbegin(), cend(), rhs.cbegin(), rhs.cend());
+            return equal(cbegin(), cend(), rhs.cbegin(), rhs.cend());
         }
         else
         {
@@ -66,7 +63,7 @@ struct basic_str_literal
     {
         if (size() == (N2 - 1U))
         {
-            return std::equal(cbegin(), cend(), rhs, (rhs + N2));
+            return equal(cbegin(), cend(), rhs, (rhs + N2));
         }
         else
         {

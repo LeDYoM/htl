@@ -2,7 +2,7 @@ export module htypes:lockable_vector;
 
 import :vector;
 import :function;
-import :algoutils;
+import :algos;
 
 namespace htps
 {
@@ -41,7 +41,7 @@ public:
      */
     constexpr void push_back(T&& element)
     {
-        addingCache_.push_back(htps::move(element));
+        addingCache_.push_back(move(element));
     }
 
     /**
@@ -53,7 +53,7 @@ public:
     template <typename... Args>
     constexpr void emplace_back(Args&&... args)
     {
-        addingCache_.emplace_back(htps::forward<Args>(args)...);
+        addingCache_.emplace_back(forward<Args>(args)...);
     }
 
     /**
@@ -71,7 +71,7 @@ public:
      */
     constexpr void erase_value(T&& element)
     {
-        remove_cache_.push_back(htps::move(element));
+        remove_cache_.push_back(move(element));
     }
 
     /**
@@ -181,8 +181,8 @@ public:
     {
         update();
 
-        for_each_all(main_container_,
-                     [f = htps::forward<F>(f)](auto& element) { f(element); });
+        for_each(main_container_,
+                 [f = forward<F>(f)](auto& element) { f(element); });
 
         update();
     }
@@ -194,11 +194,11 @@ public:
 
         if (!main_container_.empty())
         {
-            for (htps::ssize_type index{
-                     static_cast<htps::ssize_type>(main_container_.size()) - 1};
+            for (ssize_type index{
+                     static_cast<ssize_type>(main_container_.size()) - 1};
                  index > -1; --index)
             {
-                htps::forward<F>(f)(main_container_[index]);
+                forward<F>(f)(main_container_[index]);
             }
         }
 

@@ -2,7 +2,7 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/../cmake_modules" ${CMAKE_MODULE_PATH
 
 cmake_minimum_required(VERSION 3.14)
 project("HTL"
-  VERSION 0.9.2.1
+  VERSION 0.9.2.2
   DESCRIPTION "Hyper Template Library"
   HOMEPAGE_URL https://github.com/LeDYoM/htl
   LANGUAGES CXX
@@ -23,12 +23,10 @@ list(APPEND CMAKE_MODULE_PATH ${cmake_ledyom_utils_SOURCE_DIR})
 include(c_l_u_a)
 
 set(target htl)
-add_library(${target} STATIC)
+add_library(${target} SHARED)
 
 target_sources(${target}
-  PUBLIC
-  FILE_SET CXX_MODULES
-  FILES
+  PUBLIC FILE_SET CXX_MODULES FILES
   src/memory/allocator_malloc_free.cppm
   src/memory/allocator_type.cppm
   src/memory/allocatorfunc.cppm
@@ -36,8 +34,10 @@ target_sources(${target}
   src/smart_pointers/counter.cppm
   src/smart_pointers/managed_pointer.cppm
   src/smart_pointers/shared_ptr.cppm
+  src/smart_pointers/unique_ptr.cppm
+  src/smart_pointers/weak_ptr.cppm
   src/array.cppm
-  src/algoutils.cppm
+  src/algos.cppm
   src/basic_dictionary.cppm
   src/basic_str.cppm
   src/basic_types.cppm
@@ -59,11 +59,9 @@ target_sources(${target}
   src/str_literal.cppm
   src/str_view.cppm
   src/str.cppm
-  src/unique_ptr.cppm
   src/vector_base.cppm
   src/vector_storage.cppm
   src/vector.cppm
-  src/weak_ptr.cppm
 )
 
 if(MSVC)
@@ -82,20 +80,6 @@ if(MSVC)
     )
 endif()
 
-option(ENABLE_CLANG_TIDY "Run clang-tidy with C++ compiler" ON)
-
-if(ENABLE_CLANG_TIDY)
-message("AAAAAAAAAAAAAAAAAAAAAAAAA")
-find_program(CLANG_TIDY_EXE "clang-tidy")
-
-if(CLANG_TIDY_EXE)
-    message(STATUS "clang-tidy found: ${CLANG_TIDY_EXE}")
-    set(CMAKE_CXX_CLANG_TIDY ${CLANG_TIDY_EXE} -checks=-*,readability-*)
-    message("CMAKE_CXX_CLANG_TIDY: ${CMAKE_CXX_CLANG_TIDY}")
-else()
-    message(WARNING "clang-tidy not found!")
-endif()
-endif()
-
+target_include_directories(${target} PUBLIC src)
 set_my_standards_cxx_options(${target} 23)
 add_subdirectory(tests)

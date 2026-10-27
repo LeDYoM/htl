@@ -42,7 +42,7 @@ public:
      * @param t Object to construct from
      */
     template <typename T>
-    constexpr function(T t) : callable_{msptr<CallableT<T>>(htps::move(t))}
+    constexpr function(T t) : callable_{msptr<CallableT<T>>(move(t))}
     {}
 
     /**
@@ -82,7 +82,7 @@ public:
     constexpr ReturnValue operator()(Args2&&... args) const
     {
         assert(callable_);
-        return callable_->Invoke(htps::forward<Args2>(args)...);
+        return callable_->Invoke(forward<Args2>(args)...);
     }
 
     /**
@@ -124,12 +124,12 @@ private:
     {
     public:
         template <typename Y>
-        constexpr CallableT(Y&& t) noexcept : t_{htps::forward<Y>(t)}
+        constexpr CallableT(Y&& t) noexcept : t_{forward<Y>(t)}
         {}
 
         constexpr ReturnValue Invoke(Args... args) override
         {
-            return t_(htps::forward<Args>(args)...);
+            return t_(forward<Args>(args)...);
         }
 
         constexpr bool equals(CallableT const& other) const noexcept
@@ -143,10 +143,10 @@ private:
             return tmp ? equals(*tmp) : false;
         }
 
-        constexpr CallableT(CallableT&& c) noexcept : t_{htps::move(c)} {}
+        constexpr CallableT(CallableT&& c) noexcept : t_{move(c)} {}
         constexpr CallableT& operator=(CallableT&& c) noexcept
         {
-            t_ = htps::move(c);
+            t_ = move(c);
             return *this;
         }
 
@@ -168,7 +168,7 @@ private:
 
         constexpr ReturnValue Invoke(Args... args) override
         {
-            return (obj->*function_)(htps::forward<Args>(args)...);
+            return (obj->*function_)(forward<Args>(args)...);
         }
 
         constexpr bool equals(
@@ -203,7 +203,7 @@ private:
 
         constexpr ReturnValue Invoke(Args... args) override
         {
-            return (obj->*function_)(htps::forward<Args>(args)...);
+            return (obj->*function_)(forward<Args>(args)...);
         }
 
         constexpr bool equals(

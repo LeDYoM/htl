@@ -37,7 +37,7 @@ public:
     {
         auto tmp{pointer_};
         pointer_       = other.pointer_;
-        other.pointer_ = htps::move(tmp);
+        other.pointer_ = move(tmp);
         return *this;
     }
 
@@ -68,14 +68,14 @@ private:
 export template <typename T, typename... Args>
 constexpr PImplPointer<T> make_pimplp(Args&&... args) noexcept
 {
-    T* p = new T(htps::forward<Args>(args)...);
+    T* p = new T(forward<Args>(args)...);
     return PImplPointer<T>{p};
 }
 
 export template <typename T, typename... Args>
 constexpr PImplPointer<T> make_pimplp_forward(Args&&... args) noexcept
 {
-    T* p = new T{htps::forward<Args>(args)...};
+    T* p = new T{forward<Args>(args)...};
     return PImplPointer<T>{p};
 }
 

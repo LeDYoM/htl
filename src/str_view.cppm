@@ -7,7 +7,7 @@ export module htypes:str_view;
 import :btypes;
 import :str_functions;
 import :str_literal;
-import :algoutils;
+import :algos;
 
 namespace htps
 {
@@ -131,7 +131,7 @@ public:
     [[nodiscard]] constexpr bool starts_with(
         const char_type* to_find) const noexcept
     {
-        return htps::starts_with(m_begin, to_find);
+        return starts_with(m_begin, to_find);
     }
 
     [[nodiscard]] constexpr bool starts_with(

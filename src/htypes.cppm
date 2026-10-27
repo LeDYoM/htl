@@ -4,7 +4,7 @@ export module htypes;
 //export import :allocator;
 //export import :allocatorfunc;
 
-export import :algoutils;
+export import :algos;
 export import :array;
 export import :bdictionary;
 export import :btypes;

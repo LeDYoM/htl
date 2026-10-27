@@ -6,6 +6,7 @@ testing_init()
 set(target ${PROJECT_NAME})
 
 set(SOURCE_TESTS
+    algos
     array
     basic_dictionary
     dictionary

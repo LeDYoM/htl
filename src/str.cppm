@@ -10,7 +10,7 @@ export template <typename... Args>
 constexpr str make_str(Args&&... args)
 {
     return make_basic_str<typename str::value_type>(
-        htps::forward<Args>(args)...);
+        forward<Args>(args)...);
 }
 
 export using string_vector = vector<str>;

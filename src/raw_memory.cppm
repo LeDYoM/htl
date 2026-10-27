@@ -22,21 +22,19 @@ public:
     /// Default constructor.
     constexpr RawMemory() noexcept = default;
 
-    explicit RawMemory(vector<inner_type>&& data) noexcept :
-        m_data{htps::move(data)}
+    explicit RawMemory(vector<inner_type>&& data) noexcept : m_data{move(data)}
     {}
 
     RawMemory(inner_type const* data, size_type const size) noexcept :
         m_data{data, size}
     {}
 
-    RawMemory(htps::str const& data) :
+    RawMemory(str const& data) :
         RawMemory{static_cast<inner_type const*>(data.c_str()),
                   data.size() + 1U}
     {}
 
-    RawMemory(htps::str_view const& data) :
-        RawMemory{data.begin(), data.size() + 1U}
+    RawMemory(str_view const& data) : RawMemory{data.begin(), data.size() + 1U}
     {
         m_data[data.size()] = static_cast<inner_type>(0);
     }

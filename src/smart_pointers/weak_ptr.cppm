@@ -13,14 +13,14 @@ public:
     constexpr wptr(nullptr_t) noexcept : wptr{} {}
 
     constexpr wptr(wptr&& wp) noexcept :
-        wptr{htps::move(wp.m_ptr), htps::move(wp.m_counter)}
+        wptr{move(wp.m_ptr), move(wp.m_counter)}
     {
         wp.m_ptr     = nullptr;
         wp.m_counter = nullptr;
     }
 
     constexpr wptr(wptr const& wp) noexcept :
-        wptr{htps::move(wp.m_ptr), htps::move(wp.m_counter)}
+        wptr{move(wp.m_ptr), move(wp.m_counter)}
     {
         if (m_counter != nullptr)
         {
@@ -47,12 +47,12 @@ public:
 
     constexpr wptr& operator=(wptr&& wp) noexcept
     {
-        auto tmp_ptr{htps::move(wp.m_ptr)};
-        auto tmp_counter{htps::move(wp.m_counter)};
-        wp.m_ptr     = htps::move(m_ptr);
-        wp.m_counter = htps::move(m_counter);
-        m_ptr        = htps::move(tmp_ptr);
-        m_counter    = htps::move(tmp_counter);
+        auto tmp_ptr{move(wp.m_ptr)};
+        auto tmp_counter{move(wp.m_counter)};
+        wp.m_ptr     = move(m_ptr);
+        wp.m_counter = move(m_counter);
+        m_ptr        = move(tmp_ptr);
+        m_counter    = move(tmp_counter);
         return *this;
     }
 
@@ -129,7 +129,7 @@ public:
 
 private:
     constexpr wptr(T* sp, shptr_detail::counter* cnt) noexcept :
-        m_ptr{htps::move(sp)}, m_counter{htps::move(cnt)}
+        m_ptr{move(sp)}, m_counter{move(cnt)}
     {}
 
     T* m_ptr{nullptr};
