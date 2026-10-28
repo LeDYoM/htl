@@ -64,7 +64,7 @@ public:
     {}
 
     constexpr explicit basic_str(char_type const* const n) :
-        basic_str(n, strnlen(n))
+        basic_str{n, strnlen(n)}
     {}
 
     constexpr basic_str(const_iterator _begin, const_iterator _end) :

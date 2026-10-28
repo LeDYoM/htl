@@ -8,9 +8,11 @@ import :span;
 
 namespace htps
 {
+export using HashValue = size_type;
+
 export struct Hasher
 {
-    template <typename T = u32, size_type N>
+    template <typename T = HashValue, size_type N>
     static consteval T hash(char const (&s)[N]) noexcept
     {
         T hash{5381U};
@@ -23,7 +25,7 @@ export struct Hasher
         return hash;
     }
 
-    template <typename T = u32, size_type N>
+    template <typename T = HashValue, size_type N>
     static consteval T hash(str_literal<N> const s) noexcept
     {
         T hash{5381U};
@@ -36,7 +38,7 @@ export struct Hasher
         return hash;
     }
 
-    template <typename T = u32>
+    template <typename T = HashValue>
     static constexpr T hash(span<char const> const s) noexcept
     {
         T hash{5381U};
@@ -49,7 +51,7 @@ export struct Hasher
         return hash;
     }
 
-    template <typename T = u32>
+    template <typename T = HashValue>
     static constexpr T hash(span<s32 const> const s) noexcept
     {
         T hash{5381U};
@@ -62,20 +64,20 @@ export struct Hasher
         return hash;
     }
 
-    template <typename T = u32>
+    template <typename T = HashValue>
     static constexpr T hash(span<f32 const> const s) noexcept
     {
         static_assert(sizeof(s32) == sizeof(f32));
         return hash(*(reinterpret_cast<span<s32 const> const*>(&s)));
     }
 
-    template <typename T = u32>
+    template <typename T = HashValue>
     static constexpr T hash(str_view const s) noexcept
     {
         return hash(span{s.cbegin(), s.cend()});
     }
 
-    template <typename T = u32>
+    template <typename T = HashValue>
     static constexpr T hash(str const& s) noexcept
     {
         return hash(span{s.cbegin(), s.cend()});
@@ -85,10 +87,10 @@ export struct Hasher
 export template <str_literal Str>
 struct StringHash
 {
-    static constexpr u32 value{Hasher::hash(Str)};
+    static constexpr HashValue value{Hasher::hash(Str)};
 };
 
 export template <str_literal Str>
-inline constexpr u32 StringHash_v{StringHash<Str>::value};
+inline constexpr HashValue StringHash_v{StringHash<Str>::value};
 
 }  // namespace htps

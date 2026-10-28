@@ -4,71 +4,68 @@ import htypes;
 
 using namespace htps;
 
-TEST_CASE("array::array", "[array]")
+TEST_CASE("array::array Default Constructor", "[array]")
 {
-    SECTION("Default Constructor")
+    array<u32, 4U> m;
+
+    CHECK(m.size() == 4U);
+    CHECK_FALSE(m.empty());
+}
+
+TEST_CASE("array::array Copy constructor", "[array]")
+{
+    array<s32, 4U> m;
+
+    m[0U] = 5;
+
+    array<s32, 4U> m2(m);
+    CHECK(m.size() == m2.size());
+    CHECK(m[0U] == m2[0U]);
+}
+
+TEST_CASE("array::array Iterators constructor", "[array]")
+{
+    const u32 data[] = {0U, 1U, 2U, 3U, 4U};
+    array<u32, 5U> v(data, data + 5);
+    CHECK(v.size() == 5U);
+    CHECK(v[0U] == data[0U]);
+    CHECK(v[1U] == data[1U]);
+    CHECK(v[2U] == data[2U]);
+    CHECK(v[3U] == data[3U]);
+    CHECK(v[4U] == data[4U]);
+}
+
+TEST_CASE("array::array Initializer list constructor and coparison", "[array]")
+{
+    array<u32, 11U> m;
+    m = {1U, 9U, 8U, 7U, 6U, 5U, 4U, 3U, 2U, 0U, 1U};
+    CHECK(m == array{1U, 9U, 8U, 7U, 6U, 5U, 4U, 3U, 2U, 0U, 1U});
+
+    SECTION("Copy and move constructor")
     {
-        array<u32, 4U> m;
-
-        CHECK(m.size() == 4U);
-        CHECK_FALSE(m.empty());
-    }
-
-    SECTION("Copy constructor")
-    {
-        array<s32, 4U> m;
-
-        m[0U] = 5;
-
-        array<s32, 4U> m2(m);
+        auto m2(m);
+        CHECK(m == m2);
         CHECK(m.size() == m2.size());
-        CHECK(m[0U] == m2[0U]);
+
+        auto m3(move(m));
+        CHECK(m2 == m3);
+    }
+}
+
+TEST_CASE("array::array Construct from address and size", "[array]")
+{
+    SECTION("With sizeof")
+    {
+        const u32 arr[] = {4U, 3U, 2U, 1U};
+        array<u32, 4U> v(arr, sizeof(arr) / sizeof(u32));
+        CHECK(v.size() == 4U);
     }
 
-    SECTION("Iterators constructor")
+    SECTION("With sizeof")
     {
-        const u32 data[] = {0U, 1U, 2U, 3U, 4U};
-        array<u32, 5U> v(data, data + 5);
-        CHECK(v.size() == 5U);
-        CHECK(v[0U] == data[0U]);
-        CHECK(v[1U] == data[1U]);
-        CHECK(v[2U] == data[2U]);
-        CHECK(v[3U] == data[3U]);
-        CHECK(v[4U] == data[4U]);
-    }
-
-    SECTION("Initializer list constructor")
-    {
-        array<u32, 11U> m;
-        m = {1U, 9U, 8U, 7U, 6U, 5U, 4U, 3U, 2U, 0U, 1U};
-        CHECK(m == array<u32, 11U>{1, 9, 8, 7, 6, 5, 4, 3, 2, 0, 1});
-
-        SECTION("Copy and move constructor")
-        {
-            auto m2(m);
-            CHECK(m == m2);
-            CHECK(m.size() == m2.size());
-
-            auto m3(move(m));
-            CHECK(m2 == m3);
-        }
-    }
-
-    SECTION("Construct from address and size")
-    {
-        SECTION("With sizeof")
-        {
-            const u32 arr[] = {4U, 3U, 2U, 1U};
-            array<u32, 4U> v(arr, sizeof(arr) / sizeof(u32));
-            CHECK(v.size() == 4U);
-        }
-
-        SECTION("With sizeof")
-        {
-            const u32 arr[] = {4U, 3U, 2U, 1U};
-            array<u32, 4U> v(std::cbegin(arr), std::cend(arr));
-            CHECK(v.size() == 4U);
-        }
+        const u32 arr[] = {4U, 3U, 2U, 1U};
+        array<u32, 4U> v(std::cbegin(arr), std::cend(arr));
+        CHECK(v.size() == 4U);
     }
 }
 

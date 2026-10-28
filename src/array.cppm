@@ -158,17 +158,14 @@ public:
         return *this;
     }
 
+    [[nodiscard]] constexpr bool operator==(array const& rhs) const noexcept
+    {
+        return equal(cbegin(), cend(), rhs.cbegin());
+    }
+
 private:
     T buffer_[array_size];
 };
-
-export template <class T, size_type array_size>
-[[nodiscard]] constexpr bool operator==(
-    array<T, array_size> const& lhs,
-    array<T, array_size> const& rhs) noexcept
-{
-    return equal(lhs.cbegin(), lhs.cend(), rhs.cbegin());
-}
 
 export template <typename T, size_type S>
 using array_shared_pointers = array<sptr<T>, S>;
