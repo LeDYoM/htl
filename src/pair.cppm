@@ -16,6 +16,9 @@ public:
     T1 first;
     T2 second;
 
+    [[nodiscard]] constexpr bool operator==(const pair& rhs) const noexcept =
+        default;
+
     [[nodiscard]] constexpr auto operator<=>(const pair& rhs) const noexcept
     {
         if (first < rhs.first)
