@@ -15,6 +15,20 @@
             "installDir": "${sourceDir}/preset_build/intall/${presetName}"
         },
         {
+            "name": "clang-msvc-x64-base",
+            "inherits": "default",
+            "hidden": true,
+            "architecture": "x64",
+            "toolset": "ClangCL"
+        },
+        {
+            "name": "clang-msvc-2026-x64",
+            "generator": "Visual Studio 18 2026",
+            "inherits": "clang-msvc-x64-base",
+            "architecture": "x64",
+            "toolset": "ClangCL"
+        },
+        {
             "name": "win_vs_2022_x64",
             "displayName": "Visual Studio 17 x64 2022 Windows",
             "description": "Preset Visual Studio 17 x64 2022 Windows using Visual Studio Generator on Windows",
@@ -95,6 +109,16 @@
     ],
     "buildPresets": [
         {
+            "name": "clangcl-debug",
+            "configurePreset": "clang-msvc-2026-x64",
+            "configuration": "Debug"
+        },
+        {
+            "name": "clangcl-release",
+            "configurePreset": "clang-msvc-2026-x64",
+            "configuration": "Release"
+        },
+        {
             "name": "win_vs_2022_x64_debug",
             "description": "Build for Windows x64 in Debug configuration using Visual Studio 2022",
             "displayName": "Windows VS 2022 x64 debug",
@@ -138,7 +162,7 @@
             "inheritConfigureEnvironment": true,
             "configuration": "Release"
         },
-                {
+        {
             "name": "win_msvc18_x64_ninja_multi_debug",
             "description": "Build for Windows x64 in Debug configuration using Ninja with Visual Studio 2026",
             "displayName": "Windows Ninja VS 2026 x64 debug",
