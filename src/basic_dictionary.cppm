@@ -31,7 +31,7 @@ public:
     constexpr BasicDictionary() noexcept = default;
 
     constexpr BasicDictionary(std::initializer_list<element> eList) :
-        data_{htps::move(eList)}
+        data_{eList}
     {}
 
     constexpr BasicDictionary(const content& eList) : data_{eList} {}

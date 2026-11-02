@@ -23,10 +23,9 @@ list(APPEND CMAKE_MODULE_PATH ${cmake_ledyom_utils_SOURCE_DIR})
 include(c_l_u_a)
 
 set(target htl)
-add_library(${target} SHARED)
+add_library(${target} OBJECT)
 
-target_sources(${target}
-  PUBLIC FILE_SET CXX_MODULES FILES
+target_sources(${target} PRIVATE FILE_SET CXX_MODULES FILES
   src/memory/allocator_malloc_free.cppm
   src/memory/allocator_type.cppm
   src/memory/allocatorfunc.cppm

@@ -72,12 +72,12 @@ public:
     {}
 
     constexpr basic_str(basic_str&&) noexcept  = default;
-    basic_str& operator=(basic_str&&) noexcept = default;
+    constexpr basic_str& operator=(basic_str&&) noexcept = default;
 
     constexpr basic_str(basic_str const& n)              = default;
     constexpr basic_str& operator=(basic_str const& rhs) = default;
 
-    basic_str& operator=(char_type const* const n)
+    constexpr basic_str& operator=(char_type const* const n)
     {
         auto const len{strnlen(n)};
         if (len < m_data.capacity())
@@ -108,7 +108,7 @@ public:
 
     void swap(basic_str& other) { m_data.swap(other.m_data); }
 
-    static basic_str fromCharAndSize(char_type const ch, size_type const size)
+    [[nodiscard]] constexpr static basic_str fromCharAndSize(char_type const ch, size_type const size)
     {
         basic_str result(size + 1U);
         for (size_type i{0U}; i < size; ++i)
@@ -119,7 +119,7 @@ public:
     }
 
     template <typename T, size_type N = 32U>
-    static basic_str convert_to_imp(T const n)
+    [[nodiscard]] constexpr static basic_str convert_to_imp(T const n)
     {
         char buffer[N];
         std::format_to_n_result<char*> r{std::format_to_n(buffer, N, "{}", n)};
@@ -127,34 +127,34 @@ public:
         return basic_str{buffer, static_cast<size_type>(r.size)};
     }
 
-    static basic_str to_str(u64 const n) { return convert_to_imp(n); }
+    [[nodiscard]] constexpr static basic_str to_str(u64 const n) { return convert_to_imp(n); }
 
-    static basic_str to_str(s64 const n) { return convert_to_imp(n); }
+    [[nodiscard]] constexpr static basic_str to_str(s64 const n) { return convert_to_imp(n); }
 
-    static basic_str to_str(u32 const n) { return convert_to_imp(n); }
+    [[nodiscard]] constexpr static basic_str to_str(u32 const n) { return convert_to_imp(n); }
 
-    static basic_str to_str(s32 const n) { return convert_to_imp(n); }
+    [[nodiscard]] constexpr static basic_str to_str(s32 const n) { return convert_to_imp(n); }
 
-    static basic_str to_str(f32 const n) { return convert_to_imp(n); }
+    [[nodiscard]] constexpr static basic_str to_str(f32 const n) { return convert_to_imp(n); }
 
-    static basic_str to_str(f64 const n) { return convert_to_imp(n); }
+    [[nodiscard]] constexpr static basic_str to_str(f64 const n) { return convert_to_imp(n); }
 
     template <typename T>
         requires std::is_default_constructible_v<T>
-    bool is() const
+    [[nodiscard]] constexpr bool is() const
     {
         T temp;
         return convert(temp);
     }
 
-    vector<basic_str> split(char_type const& separator) const
+    [[nodiscard]] constexpr vector<basic_str> split(char_type const& separator) const
     {
         basic_str temp;
         temp.push_back(separator);
         return split(temp);
     }
 
-    vector<basic_str> split(basic_str const& separator) const
+    [[nodiscard]] constexpr vector<basic_str> split(basic_str const& separator) const
     {
         vector<basic_str> result;
         auto _this{*this};
@@ -188,17 +188,17 @@ public:
         return result;
     }
 
-    bool starts_with(basic_str const& prefix) const noexcept
+    constexpr bool starts_with(basic_str const& prefix) const noexcept
     {
         return has_in(prefix, 0U);
     }
 
-    bool ends_with(basic_str const& prefix) const noexcept
+    constexpr bool ends_with(basic_str const& prefix) const noexcept
     {
         return has_in(prefix, size() - prefix.size());
     }
 
-    bool has_in(basic_str const& prefix,
+    constexpr bool has_in(basic_str const& prefix,
                 size_type const start_position) const noexcept
     {
         if (size() < prefix.size() || start_position > size())
@@ -209,7 +209,7 @@ public:
         return (substr(start_position, prefix.size()) == prefix);
     }
 
-    size_type has(basic_str const& sub_str) const noexcept
+    constexpr size_type has(basic_str const& sub_str) const noexcept
     {
         if (size() < sub_str.size())
         {
@@ -233,7 +233,7 @@ public:
         return npos;
     }
 
-    basic_str substr(size_type start, size_type len = npos) const
+    constexpr basic_str substr(size_type start, size_type len = npos) const
     {
         if (start >= size() || len < 1U)
         {
@@ -257,14 +257,14 @@ public:
 
     constexpr basic_str& append() { return *this; }
 
-    basic_str& append(basic_str const& n)
+    constexpr basic_str& append(basic_str const& n)
     {
         m_data.pop_back();
         m_data.insert(n.m_data);
         return *this;
     }
 
-    basic_str& append(basic_str&& n)
+    constexpr basic_str& append(basic_str&& n)
     {
         m_data.pop_back();
         m_data.insert(move(n.m_data));
@@ -278,62 +278,62 @@ public:
         return *this;
     }
 
-    basic_str& append(char_type const* const n)
+    constexpr basic_str& append(char_type const* const n)
     {
         append(basic_str{n});
         return *this;
     }
 
-    basic_str& append(u64 const n)
+    constexpr basic_str& append(u64 const n)
     {
         append(to_str(n));
         return *this;
     }
 
-    basic_str& append(s64 const n)
+    constexpr basic_str& append(s64 const n)
     {
         append(to_str(n));
         return *this;
     }
 
-    basic_str& append(u32 const n)
+    constexpr basic_str& append(u32 const n)
     {
         append(to_str(n));
         return *this;
     }
 
-    basic_str& append(s32 const n)
+    constexpr basic_str& append(s32 const n)
     {
         append(to_str(n));
         return *this;
     }
 
-    basic_str& append(f32 const n)
+    constexpr basic_str& append(f32 const n)
     {
         append(to_str(n));
         return *this;
     }
 
-    basic_str& append(f64 const n)
+    constexpr basic_str& append(f64 const n)
     {
         append(to_str(n));
         return *this;
     }
 
-    basic_str& append(basic_str_view<char_type> const n)
+    constexpr basic_str& append(basic_str_view<char_type> const n)
     {
         append(n.cbegin());
         return *this;
     }
 
-    basic_str& push_back(char_type const n)
+    constexpr basic_str& push_back(char_type const n)
     {
         char_type const temp[2U] = {n, 0U};
         return append(move(temp));
     }
 
     template <typename T>
-    bool convert(T& n) const
+    constexpr bool convert(T& n) const
     {
         std::istringstream iss(c_str());
         iss >> n;
@@ -341,14 +341,14 @@ public:
     }
 
     template <typename T>
-    [[nodiscard]] pair<bool, T> convert() const
+    [[nodiscard]] constexpr pair<bool, T> convert() const
     {
         T value;
         return {convert(value), value};
     }
 
     template <typename T>
-    [[nodiscard]] T convertOrDefault() const
+    [[nodiscard]] constexpr T convertOrDefault() const
     {
         T value;
         convert(value);
@@ -356,25 +356,25 @@ public:
     }
 
     template <typename T>
-    basic_str& operator+=(T&& source)
+    constexpr basic_str& operator+=(T&& source)
     {
         return append(forward<T>(source));
     }
 
     template <size_type N>
-    basic_str& operator+=(char_type const (&a)[N])
+    constexpr basic_str& operator+=(char_type const (&a)[N])
     {
         return append(a);
     }
 
-    basic_str& operator+=(basic_str const& source) { return append(source); }
+    constexpr basic_str& operator+=(basic_str const& source) { return append(source); }
 
-    basic_str operator+(basic_str<value_type> const& rhs) const
+    constexpr basic_str operator+(basic_str<value_type> const& rhs) const
     {
         return basic_str<value_type>(*this).append(rhs);
     }
 
-    basic_str operator+(char_type const* const rhs) const
+    constexpr basic_str operator+(char_type const* const rhs) const
     {
         return basic_str<value_type>(*this).append(rhs);
     }
@@ -384,7 +384,7 @@ public:
         return m_data.empty() ? 0 : (m_data.size() - 1U);
     }
 
-    void ltrim()
+    constexpr void ltrim()
     {
         if (!empty())
         {
@@ -475,7 +475,7 @@ public:
     }
 
     // trim from end (in place)
-    void rtrim()
+    constexpr void rtrim()
     {
         if (!empty())
         {
@@ -495,7 +495,7 @@ public:
     }
 
     // trim from both ends (in place)
-    void trim()
+    constexpr void trim()
     {
         ltrim();
         rtrim();
@@ -675,7 +675,7 @@ constexpr basic_str<value_type>& operator<<(basic_str<value_type>& lhs,
 }
 
 export template <typename T, typename value_type>
-auto operator+(T&& lhs, basic_str<value_type> const& rhs)
+constexpr auto operator+(T&& lhs, basic_str<value_type> const& rhs)
 {
     return basic_str<value_type>(forward<T>(lhs)).append(rhs);
 }
@@ -712,37 +712,37 @@ constexpr basic_str<char_value> make_basic_str(T&& arg)
 }
 
 export template <typename char_value>
-inline basic_str<char_value> make_basic_str(u64&& n)
+constexpr  basic_str<char_value> make_basic_str(u64&& n)
 {
     return basic_str<char_value>::to_str(move(n));
 }
 
 export template <typename char_value>
-inline basic_str<char_value> make_basic_str(s64&& n)
+constexpr basic_str<char_value> make_basic_str(s64&& n)
 {
     return basic_str<char_value>::to_str(move(n));
 }
 
 export template <typename char_value>
-inline basic_str<char_value> make_basic_str(u32&& n)
+constexpr basic_str<char_value> make_basic_str(u32&& n)
 {
     return basic_str<char_value>::to_str(move(n));
 }
 
 export template <typename char_value>
-inline basic_str<char_value> make_basic_str(s32&& n)
+constexpr basic_str<char_value> make_basic_str(s32&& n)
 {
     return basic_str<char_value>::to_str(move(n));
 }
 
 export template <typename char_value>
-inline basic_str<char_value> make_basic_str(f32&& n)
+constexpr basic_str<char_value> make_basic_str(f32&& n)
 {
     return basic_str<char_value>::to_str(move(n));
 }
 
 export template <typename char_value>
-inline basic_str<char_value> make_basic_str(f64&& n)
+constexpr basic_str<char_value> make_basic_str(f64&& n)
 {
     return basic_str<char_value>::to_str(move(n));
 }
