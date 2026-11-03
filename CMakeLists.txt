@@ -35,6 +35,9 @@ target_sources(${target} PRIVATE FILE_SET CXX_MODULES FILES
   src/smart_pointers/shared_ptr.cppm
   src/smart_pointers/unique_ptr.cppm
   src/smart_pointers/weak_ptr.cppm
+  src/vector/vector_base.cppm
+  src/vector/vector_storage.cppm
+  src/vector/vector.cppm
   src/array.cppm
   src/algos.cppm
   src/basic_dictionary.cppm
@@ -58,9 +61,6 @@ target_sources(${target} PRIVATE FILE_SET CXX_MODULES FILES
   src/str_literal.cppm
   src/str_view.cppm
   src/str.cppm
-  src/vector_base.cppm
-  src/vector_storage.cppm
-  src/vector.cppm
 )
 
 if(MSVC)

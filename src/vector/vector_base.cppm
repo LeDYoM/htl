@@ -26,7 +26,7 @@ namespace htps
 export template <typename T, typename Allocator, typename GrowPolicy>
 class vector_base final
 {
-    vector_storage<T, Allocator, GrowPolicy> storage_;
+    vector_storage<T, Allocator, GrowPolicy> m_storage;
 
 public:
     using iterator        = T*;        //< Iterator for the values
@@ -53,7 +53,7 @@ public:
      *
      * @param size Expected size of the inner container
      */
-    explicit constexpr vector_base(size_type const size) : storage_{size} {}
+    explicit constexpr vector_base(size_type const size) : m_storage{size} {}
 
     /**
      * @brief Constructor with reserved memory and copy from source.
@@ -64,7 +64,7 @@ public:
      * @param count Number of elements to copy.
      */
     constexpr vector_base(const_iterator const source, size_type const count) :
-        storage_{count}
+        m_storage{count}
     {
         auto iterator{source};
         auto const end{source + count};
@@ -110,7 +110,7 @@ public:
      * @param other Object to move from
      */
     constexpr vector_base(vector_base&& other) noexcept :
-        storage_{move(other.storage_)}
+        m_storage{move(other.m_storage)}
     {}
 
     /**
@@ -132,7 +132,7 @@ public:
     /// Move assignment
     constexpr vector_base& operator=(vector_base&& other) noexcept
     {
-        storage_.swap(other.storage_);
+        m_storage.swap(other.m_storage);
         return *this;
     }
 
@@ -142,85 +142,85 @@ public:
     [[nodiscard]] constexpr reference operator[](const size_type index)
     {
         assert(index < size());
-        return *(storage_.at(index));
+        return *(m_storage.at(index));
     }
 
     [[nodiscard]] constexpr const_reference operator[](
         const size_type index) const
     {
         assert(index < size());
-        return *(storage_.at(index));
+        return *(m_storage.at(index));
     }
 
     [[nodiscard]] constexpr size_type capacity() const noexcept
     {
-        return storage_.capacity();
+        return m_storage.capacity();
     }
 
     [[nodiscard]] constexpr size_type size() const noexcept
     {
-        return storage_.size();
+        return m_storage.size();
     }
     [[nodiscard]] constexpr bool empty() const noexcept
     {
-        return storage_.empty();
+        return m_storage.empty();
     }
     [[nodiscard]] constexpr iterator begin() noexcept
     {
-        return storage_.begin();
+        return m_storage.begin();
     }
     [[nodiscard]] constexpr const_iterator begin() const noexcept
     {
-        return storage_.begin();
+        return m_storage.begin();
     }
     [[nodiscard]] constexpr const_iterator cbegin() const noexcept
     {
-        return storage_.cbegin();
+        return m_storage.cbegin();
     }
-    [[nodiscard]] constexpr iterator end() noexcept { return storage_.end(); }
+    [[nodiscard]] constexpr iterator end() noexcept { return m_storage.end(); }
     [[nodiscard]] constexpr const_iterator end() const noexcept
     {
-        return storage_.end();
+        return m_storage.end();
     }
     [[nodiscard]] constexpr const_iterator cend() const noexcept
     {
-        return storage_.cend();
+        return m_storage.cend();
     }
 
     [[nodiscard]] constexpr T& back() noexcept
     {
         assert(size() > 0U);
-        return *(storage_.at(size() - 1U));
+        return *(m_storage.at(size() - 1U));
     }
 
     constexpr T const& back() const noexcept
     {
         assert(size() > 0U);
-        return *(storage_.at(size() - 1U));
+        return *(m_storage.at(size() - 1U));
     }
 
     constexpr T const& cback() const noexcept
     {
         assert(size() > 0U);
-        return *(storage_.cat(size() - 1U));
+        return *(m_storage.cat(size() - 1U));
     }
 
     constexpr T& front() noexcept
     {
         assert(!empty());
-        return *(storage_.at(0U));
+        return *(m_storage.at(0U));
     }
 
     constexpr T const& front() const noexcept
     {
         assert(!empty());
-        return *(storage_.at(0U));
+        return *(m_storage.at(0U));
     }
 
     constexpr T const& cfront() const noexcept
     {
         assert(!empty());
-        return *(storage_.at(0U));
+        return *(m_storage.at(0U));
     }
 
     template <typename F>
@@ -277,7 +277,7 @@ public:
 
     constexpr void swap(vector_base& other) noexcept
     {
-        storage_.swap(other.storage_);
+        m_storage.swap(other.m_storage);
     }
 
     template <bool discard_order = true>
@@ -692,25 +692,25 @@ public:
         return cfind_backwards(element);
     }
 
-    constexpr void shrink_to_fit() { storage_.shrink_to_fit(); }
+    constexpr void shrink_to_fit() { m_storage.shrink_to_fit(); }
 
-    constexpr void push_back(const T& value) { storage_.push_back(value); }
+    constexpr void push_back(const T& value) { m_storage.push_back(value); }
 
     constexpr void push_back(rv_reference value)
     {
-        storage_.push_back(move(value));
+        m_storage.push_back(move(value));
     }
 
     template <typename... Args>
     constexpr void emplace_back(Args&&... args)
     {
-        storage_.emplace_back(forward<Args>(args)...);
+        m_storage.emplace_back(forward<Args>(args)...);
     }
 
     constexpr void insert(iterator const where, const T& element)
     {
         checkRange(where);
-        storage_.insert(where, element);
+        m_storage.insert(where, element);
     }
 
     constexpr void insert(vector_base const& other)
@@ -771,11 +771,11 @@ public:
         }
     }
 
-    constexpr void pop_back() noexcept { storage_.pop_back(); }
+    constexpr void pop_back() noexcept { m_storage.pop_back(); }
 
     constexpr void reserve(size_type const capacity)
     {
-        storage_.reserve(capacity);
+        m_storage.reserve(capacity);
     }
 
     /**
