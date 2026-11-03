@@ -34,14 +34,7 @@ public:
     {
         assert(where != nullptr);
 
-        if constexpr (sizeof...(args) > 0U)
-        {
-            ::new (static_cast<void*>(where)) T(forward<Args>(args)...);
-        }
-        else
-        {
-            ::new (static_cast<void*>(where)) T{};
-        }
+        ::new (static_cast<void*>(where)) T(forward<Args>(args)...);
     }
 
     static void destruct(pointer where) noexcept(noexcept(where->~T()))
