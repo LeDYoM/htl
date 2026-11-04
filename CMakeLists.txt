@@ -36,6 +36,8 @@ target_sources(${target} PRIVATE FILE_SET CXX_MODULES FILES
   src/smart_pointers/unique_ptr.cppm
   src/smart_pointers/weak_ptr.cppm
   src/vector/vector_base.cppm
+  src/vector/vector_stack_base.cppm
+  src/vector/vector_stack.cppm
   src/vector/vector_storage.cppm
   src/vector/vector.cppm
   src/array.cppm

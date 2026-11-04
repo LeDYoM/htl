@@ -23,6 +23,7 @@ set(SOURCE_TESTS
     str_view
     str
     unique_ptr
+    vector_stack
     vector
     weak_ptr
 )
