@@ -137,57 +137,48 @@ public:
     }
 
     /// Destructor.
-    inline ~vector_base() noexcept { clear(); }
+    ~vector_base() noexcept { clear(); }
 
-    [[nodiscard]] constexpr reference operator[](const size_type index)
+    constexpr reference operator[](const size_type index)
     {
         assert(index < size());
         return *(m_storage.at(index));
     }
 
-    [[nodiscard]] constexpr const_reference operator[](
-        const size_type index) const
+    constexpr const_reference operator[](const size_type index) const
     {
         assert(index < size());
         return *(m_storage.at(index));
     }
 
-    [[nodiscard]] constexpr size_type capacity() const noexcept
+    constexpr size_type capacity() const noexcept
     {
         return m_storage.capacity();
     }
 
-    [[nodiscard]] constexpr size_type size() const noexcept
-    {
-        return m_storage.size();
-    }
-    [[nodiscard]] constexpr bool empty() const noexcept
-    {
-        return m_storage.empty();
-    }
-    [[nodiscard]] constexpr iterator begin() noexcept
+    constexpr size_type size() const noexcept { return m_storage.size(); }
+
+    constexpr bool empty() const noexcept { return m_storage.empty(); }
+
+    constexpr iterator begin() noexcept { return m_storage.begin(); }
+
+    constexpr const_iterator begin() const noexcept
     {
         return m_storage.begin();
     }
-    [[nodiscard]] constexpr const_iterator begin() const noexcept
-    {
-        return m_storage.begin();
-    }
-    [[nodiscard]] constexpr const_iterator cbegin() const noexcept
+
+    constexpr const_iterator cbegin() const noexcept
     {
         return m_storage.cbegin();
     }
-    [[nodiscard]] constexpr iterator end() noexcept { return m_storage.end(); }
-    [[nodiscard]] constexpr const_iterator end() const noexcept
-    {
-        return m_storage.end();
-    }
-    [[nodiscard]] constexpr const_iterator cend() const noexcept
-    {
-        return m_storage.cend();
-    }
 
-    [[nodiscard]] constexpr T& back() noexcept
+    constexpr iterator end() noexcept { return m_storage.end(); }
+
+    constexpr const_iterator end() const noexcept { return m_storage.end(); }
+
+    constexpr const_iterator cend() const noexcept { return m_storage.cend(); }
+
+    constexpr T& back() noexcept
     {
         assert(size() > 0U);
         return *(m_storage.at(size() - 1U));
