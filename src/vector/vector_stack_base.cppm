@@ -1,6 +1,7 @@
 module;
 
 #include <initializer_list>
+#include <cassert>
 
 export module htypes:vector_stack_base;
 
@@ -136,17 +137,17 @@ public:
         }
     }
 
-    [[nodiscard]] constexpr reference operator[](size_type const index)
+    constexpr reference operator[](size_type const index)
     {
         assert(index < size());
-        return *(m_storage[alignof(T) * index]);
+        return reinterpret_cast<reference>(*(&(m_storage[alignof(T) * index])));
     }
 
-    [[nodiscard]] constexpr const_reference operator[](
-        const size_type index) const
+    constexpr const_reference operator[](const size_type index) const
     {
         assert(index < size());
-        return *(m_storage[alignof(T) * index]);
+        return reinterpret_cast<const_reference>(
+            *(&(m_storage[alignof(T) * index])));
     }
 
     constexpr size_type capacity() const noexcept { return N; }
@@ -155,21 +156,23 @@ public:
 
     constexpr bool empty() const noexcept { return m_size == 0U; }
 
-    constexpr iterator begin() noexcept { return &(m_storage[0U]); }
+    constexpr bool full() const noexcept { return m_size == N; }
+
+    constexpr iterator begin() noexcept
+    {
+        return reinterpret_cast<iterator>(m_storage);
+    }
 
     constexpr const_iterator begin() const noexcept
     {
-        return m_storage.begin();
+        return reinterpret_cast<const_iterator>(m_storage);
     }
 
-    constexpr const_iterator cbegin() const noexcept
-    {
-        return m_storage.cbegin();
-    }
+    constexpr const_iterator cbegin() const noexcept { return begin(); }
 
-    constexpr iterator end() noexcept { return m_storage.end(); }
+    constexpr iterator end() noexcept { return &((*this)[m_size]); }
 
-    constexpr const_iterator end() const noexcept { return m_storage.end(); }
+    constexpr const_iterator end() const noexcept { return &(*this[m_size]); }
 
     constexpr const_iterator cend() const noexcept { return m_storage.cend(); }
 
@@ -209,56 +212,22 @@ public:
         return *(m_storage.at(0U));
     }
 
-    template <typename F>
-    constexpr void for_each(F f)
+    constexpr void push_back(const T& value)
     {
-        if (!empty())
-        {
-            auto current{begin()};
-            do
-            {
-                f(*current);
-            } while (++current != end());
-        }
+        ConstructDestruct::construct(end(), value);
+        ++m_size;
     }
 
-    template <typename F>
-    constexpr void for_each_backwards(F f) const
+    constexpr void push_back(T&& value)
     {
-        if (!empty())
-        {
-            auto current{end()};
-            while (current-- != begin())
-            {
-                f(*current);
-            }
-        }
+        ConstructDestruct::construct(end(), move(value));
+        ++m_size;
     }
 
-    template <typename F>
-    constexpr void cfor_each(F f) const
+    template <typename... Args>
+    constexpr void emplace_back(Args&&... args)
     {
-        if (!empty())
-        {
-            auto current{cbegin()};
-            do
-            {
-                f(*current);
-            } while (++current != cend());
-        }
-    }
-
-    template <typename F>
-    constexpr void cfor_each_backwards(F f)
-    {
-        if (!empty())
-        {
-            auto current{cend()};
-            while (--current != cbegin())
-            {
-                f(*current);
-            }
-        }
+        ConstructDestruct::construct(end(), forward<Args>(args)...);
     }
 };
 

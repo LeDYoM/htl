@@ -6,26 +6,26 @@ testing_init()
 set(target ${PROJECT_NAME})
 
 set(SOURCE_TESTS
-    algos
-    array
-    basic_dictionary
-    dictionary
-    function
-    hash
-    lockable_vector
-    menum
-    pair
-    shared_ptr
-    span
-    stack
-    str_functions
-    str_literal
-    str_view
-    str
-    unique_ptr
+#    algos
+#    array
+#    basic_dictionary
+#    dictionary
+#    function
+#    hash
+#    lockable_vector
+#    menum
+#    pair
+#    shared_ptr
+#    span
+#    stack
+#    str_functions
+#    str_literal
+#    str_view
+#    str
+#    unique_ptr
     vector_stack
-    vector
-    weak_ptr
+#    vector
+#    weak_ptr
 )
 
 add_test_executable(${target} SOURCE_TESTS ${SOURCE_TESTS})

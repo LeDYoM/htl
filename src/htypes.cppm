@@ -29,6 +29,7 @@ export import :str_view;
 export import :str;
 export import :unique_ptr;
 export import :vector_base;
+export import :vector_stack;
 export import :vector_storage;
 export import :vector;
 export import :weak_ptr;
