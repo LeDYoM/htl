@@ -170,27 +170,34 @@ public:
 
     constexpr const_iterator cbegin() const noexcept { return begin(); }
 
-    constexpr iterator end() noexcept { return &((*this)[m_size]); }
+    constexpr iterator end() noexcept
+    {
+        return reinterpret_cast<iterator>(m_storage + (alignof(T) * m_size));
+    }
 
-    constexpr const_iterator end() const noexcept { return &(*this[m_size]); }
+    constexpr const_iterator end() const noexcept
+    {
+        return reinterpret_cast<const_iterator>(m_storage +
+                                                (alignof(T) * m_size));
+    }
 
     constexpr const_iterator cend() const noexcept { return m_storage.cend(); }
 
     constexpr T& back() noexcept
     {
-        assert(size() > 0U);
+        assert(!empty());
         return *(m_storage.at(size() - 1U));
     }
 
     constexpr T const& back() const noexcept
     {
-        assert(size() > 0U);
+        assert(!empty());
         return *(m_storage.at(size() - 1U));
     }
 
     constexpr T const& cback() const noexcept
     {
-        assert(size() > 0U);
+        assert(!empty());
         return *(m_storage.cat(size() - 1U));
     }
 
