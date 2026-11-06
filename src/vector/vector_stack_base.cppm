@@ -41,14 +41,27 @@ public:
      * @param source Pointer to the first element of the
      * @param count Number of elements to copy.
      */
-    constexpr vector_stack_base(const_iterator const source, size_type count)
+    constexpr vector_stack_base(const_iterator source, size_type count)
     {
-        auto iterator{source};
+        /*
+                if consteval
+                {
+                    static_assert(N <= count);
+                }
+                else
+                */
+        {
+            if (count > N)
+            {
+                count = N;
+            }
+        }
+
         auto const end{source + count};
-        while (iterator != end)
+        while (source != end)
         {
             // Construct by copy.
-            push_back((*iterator++));
+            push_back((*source++));
         }
     }
 

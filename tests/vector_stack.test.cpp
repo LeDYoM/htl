@@ -63,5 +63,17 @@ TEST_CASE("vector_stack::vector_stack other constructors", "[vector_stack]")
             CHECK(v[0] == -2);
             CHECK(v[1] == -1);
         }
+
+        {
+            vector_stack<s32, 5> v{-2, -1, 0, 1, 2, 3, 4, 5};
+            CHECK(v.size() == 5U);
+            CHECK(v.capacity() == 5U);
+            CHECK(v.full());
+            CHECK(v[0] == -2);
+            CHECK(v[1] == -1);
+            CHECK(v[2] == 0);
+            CHECK(v[3] == 1);
+            CHECK(v[4] == 2);
+        }
     }
 }
