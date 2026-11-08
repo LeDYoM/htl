@@ -43,18 +43,9 @@ public:
      */
     constexpr vector_stack_base(const_iterator source, size_type count)
     {
-        /*
-                if consteval
-                {
-                    static_assert(N <= count);
-                }
-                else
-                */
+        if (count > N)
         {
-            if (count > N)
-            {
-                count = N;
-            }
+            count = N;
         }
 
         auto const end{source + count};
