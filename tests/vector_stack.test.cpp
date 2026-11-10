@@ -75,3 +75,32 @@ TEST_CASE("vector_stack::vector_stack std::initializer_list constructor",
         CHECK(v[4] == 2);
     }
 }
+
+namespace
+{
+struct TestingDummy
+{
+    int a;
+    int b;
+
+    bool operator==(TestingDummy const&) const noexcept = default;
+};
+}  // namespace
+
+TEST_CASE("vector_stack::vector_stack back() front()", "[vector_stack]")
+{
+    vector_stack<TestingDummy, 4> v;
+
+    auto b = alignof(TestingDummy);
+    (void)(b);
+
+    auto c = sizeof(TestingDummy);
+    (void)(c);
+
+
+    v.emplace_back(5, 3);
+    v.emplace_back(23, 45);
+
+    CHECK(v.size() == 2U);
+    CHECK(v.front() == TestingDummy{5, 3});
+}

@@ -48,7 +48,10 @@ constexpr ForwardIt2 copy_n(ForwardIt1 first, Size count, ForwardIt2 d_first)
 }
 
 template <class InputIt1, class InputIt2>
-constexpr bool equal(InputIt1 first1, InputIt1 last1, InputIt2 first2, InputIt2 last2)
+constexpr bool equal(InputIt1 first1,
+                     InputIt1 last1,
+                     InputIt2 first2,
+                     InputIt2 last2)
 {
     return std::equal(first1, last1, first2, last2);
 }
@@ -58,4 +61,23 @@ constexpr bool equal(InputIt1 first1, InputIt1 last1, InputIt2 first2)
 {
     return std::equal(first1, last1, first2);
 }
+
+template <typename iterator1, typename iterator2, typename F>
+constexpr void for_each(iterator1 b, iterator2 e, F&& f)
+{
+    while (b != e)
+    {
+        f(*b++);
+    }
+}
+
+template <typename iterator1, typename iterator2, typename F>
+constexpr void for_each_backwards(iterator1 b, iterator2 e, F&& f)
+{
+    while (b != e)
+    {
+        f(*e--);
+    }
+}
+
 }  // namespace htps

@@ -214,58 +214,6 @@ public:
         return *(m_storage.at(0U));
     }
 
-    template <typename F>
-    constexpr void for_each(F f)
-    {
-        if (!empty())
-        {
-            auto current{begin()};
-            do
-            {
-                f(*current);
-            } while (++current != end());
-        }
-    }
-
-    template <typename F>
-    constexpr void for_each_backwards(F f) const
-    {
-        if (!empty())
-        {
-            auto current{end()};
-            while (current-- != begin())
-            {
-                f(*current);
-            }
-        }
-    }
-
-    template <typename F>
-    constexpr void cfor_each(F f) const
-    {
-        if (!empty())
-        {
-            auto current{cbegin()};
-            do
-            {
-                f(*current);
-            } while (++current != cend());
-        }
-    }
-
-    template <typename F>
-    constexpr void cfor_each_backwards(F f)
-    {
-        if (!empty())
-        {
-            auto current{cend()};
-            while (--current != cbegin())
-            {
-                f(*current);
-            }
-        }
-    }
-
     constexpr void swap(vector_base& other) noexcept
     {
         m_storage.swap(other.m_storage);

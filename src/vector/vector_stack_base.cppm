@@ -12,8 +12,10 @@ namespace htps
 export template <typename T, size_type N, typename ConstructDestruct>
 class vector_stack_base final
 {
+    static constexpr size_type kElementSize{alignof(T) > sizeof(T) ? alignof(T)
+                                                                   : sizeof(T)};
     size_type m_size{0U};
-    alignas(alignof(T)) u8 m_storage[alignof(T) * N];
+    alignas(alignof(T)) u8 m_storage[kElementSize * N];
 
 public:
     using iterator        = T*;        //< Iterator for the values
@@ -144,14 +146,14 @@ public:
     constexpr reference operator[](size_type const index)
     {
         assert(index < size());
-        return reinterpret_cast<reference>(*(&(m_storage[alignof(T) * index])));
+        return reinterpret_cast<reference>(*(&(m_storage[kElementSize * index])));
     }
 
     constexpr const_reference operator[](const size_type index) const
     {
         assert(index < size());
         return reinterpret_cast<const_reference>(
-            *(&(m_storage[alignof(T) * index])));
+            *(&(m_storage[kElementSize * index])));
     }
 
     constexpr size_type capacity() const noexcept { return N; }
@@ -176,13 +178,13 @@ public:
 
     constexpr iterator end() noexcept
     {
-        return reinterpret_cast<iterator>(m_storage + (alignof(T) * m_size));
+        return reinterpret_cast<iterator>(m_storage + (kElementSize * m_size));
     }
 
     constexpr const_iterator end() const noexcept
     {
         return reinterpret_cast<const_iterator>(m_storage +
-                                                (alignof(T) * m_size));
+                                                (kElementSize * m_size));
     }
 
     constexpr const_iterator cend() const noexcept { return m_storage.cend(); }
@@ -190,37 +192,37 @@ public:
     constexpr T& back() noexcept
     {
         assert(!empty());
-        return *(m_storage.at(size() - 1U));
+        return *(end() - 1);
     }
 
     constexpr T const& back() const noexcept
     {
         assert(!empty());
-        return *(m_storage.at(size() - 1U));
+        return *(end() - 1);
     }
 
     constexpr T const& cback() const noexcept
     {
         assert(!empty());
-        return *(m_storage.cat(size() - 1U));
+        return *(end() - 1);
     }
 
     constexpr T& front() noexcept
     {
         assert(!empty());
-        return *(m_storage.at(0U));
+        return *(begin());
     }
 
     constexpr T const& front() const noexcept
     {
         assert(!empty());
-        return *(m_storage.at(0U));
+        return *(begin());
     }
 
     constexpr T const& cfront() const noexcept
     {
         assert(!empty());
-        return *(m_storage.at(0U));
+        return *(begin());
     }
 
     constexpr void push_back(const T& value)
@@ -239,6 +241,7 @@ public:
     constexpr void emplace_back(Args&&... args)
     {
         ConstructDestruct::construct(end(), forward<Args>(args)...);
+        ++m_size;
     }
 };
 
