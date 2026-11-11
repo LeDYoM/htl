@@ -87,20 +87,32 @@ struct TestingDummy
 };
 }  // namespace
 
-TEST_CASE("vector_stack::vector_stack back() front()", "[vector_stack]")
+TEST_CASE("vector_stack::back() front()", "[vector_stack]")
 {
     vector_stack<TestingDummy, 4> v;
-
-    auto b = alignof(TestingDummy);
-    (void)(b);
-
-    auto c = sizeof(TestingDummy);
-    (void)(c);
-
 
     v.emplace_back(5, 3);
     v.emplace_back(23, 45);
 
     CHECK(v.size() == 2U);
     CHECK(v.front() == TestingDummy{5, 3});
+    CHECK(v.back() == TestingDummy{23, 45});
+
+    v.emplace_back(329, 65536);
+    CHECK(v.size() == 3U);
+    CHECK(v.front() == TestingDummy{5, 3});
+    CHECK(v.back() == TestingDummy{329, 65536});
+
+    v.emplace_back(100000000, 993345664);
+
+    CHECK(v.size() == 4U);
+    CHECK(v.front() == TestingDummy{5, 3});
+    CHECK(v[1] == TestingDummy{23, 45});
+    CHECK(v[2] == TestingDummy{329, 65536});
+    CHECK(v.back() == TestingDummy{100000000, 993345664});
+}
+
+TEST_CASE("vector_stack::push and pop", "[vector_stack]")
+{
+
 }
