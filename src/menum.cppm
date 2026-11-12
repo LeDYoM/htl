@@ -1,7 +1,6 @@
 module;
 
 #include <type_traits>
-#include <limits>
 
 export module htypes:menum;
 
@@ -68,18 +67,18 @@ public:
         return *this;
     }
 
-    constexpr bool isValid() const noexcept
+    [[nodiscard]] constexpr bool isValid() const noexcept
     {
         return (getNumeric() >= min_numeric) && (getNumeric() <= max_numeric);
     }
 
-    constexpr bool nextIsValid() const noexcept
+    [[nodiscard]] constexpr bool nextIsValid() const noexcept
     {
         MEnum temp{value};
         return (++temp).isValid();
     }
 
-    constexpr bool previousIsValid() const noexcept
+    [[nodiscard]] constexpr bool previousIsValid() const noexcept
     {
         MEnum temp{value};
         return (--temp).isValid();

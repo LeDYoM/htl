@@ -16,9 +16,9 @@ struct basic_str_literal
         copy_n(str, N, value);
     }
 
-    constexpr size_type size() const noexcept { return m_real_size - 1U; }
+    [[nodiscard]] constexpr size_type size() const noexcept { return m_real_size - 1U; }
 
-    constexpr bool empty() const noexcept { return m_real_size == 1U; }
+    [[nodiscard]] constexpr bool empty() const noexcept { return m_real_size == 1U; }
 
     constexpr char_type operator[](size_type const index) const noexcept
     {
@@ -71,7 +71,7 @@ struct basic_str_literal
         }
     }
 
-    constexpr str_literal_hash hash() const noexcept { return value[0]; }
+    [[nodiscard]] constexpr str_literal_hash hash() const noexcept { return value[0]; }
 
     size_type m_real_size;
     char_type value[N];

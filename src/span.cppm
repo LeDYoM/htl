@@ -44,12 +44,15 @@ public:
         span{v.begin(), v.end()}
     {}
 
-    constexpr size_type size() const noexcept
+    [[nodiscard]] constexpr size_type size() const noexcept
     {
         return static_cast<size_type>(m_end - m_begin);
     }
 
-    constexpr bool empty() const noexcept { return m_begin == m_end; }
+    [[nodiscard]] constexpr bool empty() const noexcept
+    {
+        return m_begin == m_end;
+    }
 
     constexpr iterator begin() noexcept { return m_begin; }
     constexpr const_iterator begin() const noexcept { return m_begin; }

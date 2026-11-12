@@ -137,7 +137,7 @@ public:
      * @return true Elements are waiting for an update
      * @return false No elements waiting for an update
      */
-    constexpr bool are_pending_adds() const noexcept
+    [[nodiscard]] constexpr bool are_pending_adds() const noexcept
     {
         return !addingCache_.empty();
     }
@@ -162,7 +162,7 @@ public:
      * @return true The are some pending removes waiting
      * @return false No pending removes
      */
-    constexpr bool are_pending_removes() const noexcept
+    [[nodiscard]] constexpr bool are_pending_removes() const noexcept
     {
         return !remove_cache_.empty();
     }

@@ -44,16 +44,16 @@ public:
     RawMemory(RawMemory&&) noexcept            = default;
     RawMemory& operator=(RawMemory&&) noexcept = default;
 
-    inner_type const* cbegin() const noexcept { return m_data.cbegin(); }
-    inner_type const* cend() const noexcept { return m_data.cend(); }
+    [[nodiscard]] inner_type const* cbegin() const noexcept { return m_data.cbegin(); }
+    [[nodiscard]] inner_type const* cend() const noexcept { return m_data.cend(); }
 
-    size_type size() const noexcept { return m_data.size(); }
+    [[nodiscard]] size_type size() const noexcept { return m_data.size(); }
 
-    bool empty() const noexcept { return m_data.empty(); }
+    [[nodiscard]] bool empty() const noexcept { return m_data.empty(); }
 
-    inner_type const* data() const noexcept { return m_data.cbegin(); }
+    [[nodiscard]] inner_type const* data() const noexcept { return m_data.cbegin(); }
 
-    str to_str() const
+    [[nodiscard]] str to_str() const
     {
         if (!empty())
         {
@@ -65,13 +65,14 @@ public:
         return str{};
     }
 
-    str_view to_str_view() const
+    [[nodiscard]] str_view to_str_view() const
     {
         if (!empty())
         {
             str_view result(
                 reinterpret_cast<str_view::const_iterator>(cbegin()),
                 reinterpret_cast<str_view::const_iterator>(cend() - 1));
+            return result;
         }
         return str_view{};
     }

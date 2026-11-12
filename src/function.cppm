@@ -114,7 +114,7 @@ private:
     class ICallable
     {
     public:
-        virtual ~ICallable() {}
+        virtual ~ICallable() = default;
         virtual ReturnValue Invoke(Args...)                  = 0;
         virtual bool equals(ICallable const&) const noexcept = 0;
     };
@@ -140,10 +140,11 @@ private:
         constexpr bool equals(ICallable const& other) const noexcept override
         {
             CallableT const* const tmp{dynamic_cast<CallableT const*>(&other)};
-            return tmp ? equals(*tmp) : false;
+            return tmp && equals(*tmp);
         }
 
         constexpr CallableT(CallableT&& c) noexcept : t_{move(c)} {}
+
         constexpr CallableT& operator=(CallableT&& c) noexcept
         {
             t_ = move(c);
@@ -181,7 +182,7 @@ private:
         {
             function::CallableMethodPointerT<T> const* const tmp{
                 dynamic_cast<CallableMethodPointerT<T> const*>(&other)};
-            return tmp ? equals(*tmp) : false;
+            return tmp && equals(*tmp);
         }
 
     private:
@@ -216,7 +217,7 @@ private:
         {
             function::ConstCallableMethodPointerT<T> const* const tmp{
                 dynamic_cast<ConstCallableMethodPointerT<T> const*>(&other)};
-            return tmp ? equals(*tmp) : false;
+            return tmp && equals(*tmp);
         }
 
     private:

@@ -4,7 +4,6 @@ module;
 #include <cassert>
 #include <iterator>
 #include <cstddef>
-#include <concepts>
 
 export module htypes:array;
 
@@ -25,7 +24,7 @@ public:
     using const_reference  = const T&;
     using size_t           = size_type;
     using value_type       = T;
-    using const_value_type = const T;
+    using const_value_type = T const;
 
     constexpr array() = default;
 
@@ -41,7 +40,7 @@ public:
 
         // If after copying from initializer list there are still free places,
         // expand the last element of the list and fill the free places.
-        if (iList.size() < array_size && iList.size() > 0U)
+        if (iList.size() < array_size && !iList.empty())
         {
             size_t counter{iList.size()};
             buffer_element = &buffer_[counter];
@@ -96,14 +95,17 @@ public:
         return buffer_[index];
     }
 
-    constexpr size_t size() const noexcept { return array_size; }
-    constexpr bool empty() const noexcept { return array_size == 0U; }
+    [[nodiscard]] constexpr size_t size() const noexcept { return array_size; }
+
+    [[nodiscard]] constexpr bool empty() const noexcept { return array_size == 0U; }
 
     [[nodiscard]] constexpr iterator begin() noexcept { return buffer_; }
+
     [[nodiscard]] constexpr const_iterator begin() const noexcept
     {
         return buffer_;
     }
+
     [[nodiscard]] constexpr iterator end() noexcept
     {
         return buffer_ + array_size;
@@ -112,15 +114,19 @@ public:
     {
         return buffer_ + array_size;
     }
+
     [[nodiscard]] constexpr const_iterator cbegin() const noexcept
     {
         return begin();
+
     }
     [[nodiscard]] constexpr const_iterator cend() const noexcept
     {
         return end();
+
     }
     [[nodiscard]] constexpr reference front() noexcept { return *begin(); }
+
     [[nodiscard]] constexpr reference back() noexcept
     {
         return buffer_[array_size - 1U];
@@ -176,10 +182,10 @@ using array_unique_pointers = array<uptr<T>, S>;
 export template <typename T, size_type S>
 using array_weak_pointers = array<wptr<T>, S>;
 
-export template <typename _Tp, typename... _Up>
-array(_Tp, _Up...)
-    -> array<std::enable_if_t<(std::is_same_v<_Tp, _Up> && ...), _Tp>,
-             1 + sizeof...(_Up)>;
+export template <typename Tp, typename... Up>
+array(Tp, Up...)
+    -> array<std::enable_if_t<(std::is_same_v<Tp, Up> && ...), Tp>,
+             1 + sizeof...(Up)>;
 
 export template <typename T>
 array(T) -> array<T, 1U>;

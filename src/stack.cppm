@@ -52,9 +52,21 @@ public:
         return m_data.reserve(capacity);
     }
 
-    constexpr size_type capacity() const noexcept { return m_data.capacity(); }
-    constexpr size_type size() const noexcept { return m_data.size(); }
-    constexpr bool empty() const noexcept { return m_data.empty(); }
+    [[nodiscard]] constexpr size_type capacity() const noexcept
+    {
+        return m_data.capacity();
+    }
+
+    [[nodiscard]] constexpr size_type size() const noexcept
+    {
+        return m_data.size();
+    }
+
+    [[nodiscard]] constexpr bool empty() const noexcept
+    {
+        return m_data.empty();
+    }
+
     constexpr T& back() noexcept { return m_data.back(); }
     constexpr const T& cback() const noexcept { return m_data.cback(); }
     constexpr T& top() noexcept { return m_data.back(); }

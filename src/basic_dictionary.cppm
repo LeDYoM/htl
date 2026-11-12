@@ -165,9 +165,9 @@ public:
         return cfind_index(key);
     }
 
-    constexpr size_type size() const noexcept { return data_.size(); }
+    [[nodiscard]] constexpr size_type size() const noexcept { return data_.size(); }
 
-    constexpr bool empty() const noexcept { return data_.empty(); }
+    [[nodiscard]] constexpr bool empty() const noexcept { return data_.empty(); }
 
     constexpr value_type const& index(size_type const index) const
     {
