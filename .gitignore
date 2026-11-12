@@ -69,3 +69,4 @@ Testing/
 .cache/
 
 preset_build/
+.idea/
