@@ -14,6 +14,11 @@ import :algos;
 
 namespace htps
 {
+/**
+ * @brief An array class.
+ * @note The main difference of this class with the standard array class is,
+ * that the standard mandates an aggregate and this class is not.
+ */
 export template <class T, size_t array_size>
 class array final
 {
@@ -35,7 +40,7 @@ public:
         // Copy everything from initializer list
         for (auto&& element : iList)
         {
-            (*buffer_element++) = element;
+            (*buffer_element++) = move(element);
         }
 
         // If after copying from initializer list there are still free places,

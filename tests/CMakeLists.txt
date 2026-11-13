@@ -7,7 +7,7 @@ set(target ${PROJECT_NAME})
 
 set(SOURCE_TESTS
 #    algos
-#    array
+    array
 #    basic_dictionary
 #    dictionary
 #    function

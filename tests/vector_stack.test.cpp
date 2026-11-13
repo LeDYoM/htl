@@ -1,4 +1,5 @@
 #include "catch_include.hpp"
+#include <array>
 
 import htypes;
 
@@ -243,6 +244,53 @@ TEST_CASE("vector_stack::moving", "[vector_stack]")
             CHECK(v.full());
 
             vector_stack<sptr<s32>, 5> v2{msptr<s32>(50)};
+            CHECK(v2.size() == 1U);
+            v2 = move(v);
+
+            CHECK(v2.size() == 5);
+            CHECK(v2.full());
+            CHECK(v.empty());
+        }
+    }
+
+    vector_stack<uptr<s32>, 5> g;
+
+    SECTION("With unique ptrs")
+    {
+        SECTION("Move constructor")
+        {
+            vector_stack<uptr<s32>, 5> v;
+
+            v.push_back(muptr<s32>(-2));
+            v.push_back(muptr<s32>(-1));
+            v.push_back(muptr<s32>(0));
+            v.push_back(muptr<s32>(1));
+            v.push_back(muptr<s32>(2));
+
+            CHECK(v.size() == 5);
+            CHECK(v.full());
+
+            vector_stack<uptr<s32>, 5> v2{move(v)};
+
+            CHECK(v2.size() == 5);
+            CHECK(v2.full());
+            CHECK(v.empty());
+        }
+
+        SECTION("Move assignment")
+        {
+            vector_stack<uptr<s32>, 5> v;
+
+            v.push_back(muptr<s32>(-2));
+            v.push_back(muptr<s32>(-1));
+            v.push_back(muptr<s32>(0));
+            v.push_back(muptr<s32>(1));
+            v.push_back(muptr<s32>(2));
+
+            CHECK(v.size() == 5);
+            CHECK(v.full());
+
+            vector_stack<uptr<s32>, 5> v2{muptr<s32>(50)};
             CHECK(v2.size() == 1U);
             v2 = move(v);
 

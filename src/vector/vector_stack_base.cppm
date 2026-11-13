@@ -125,6 +125,7 @@ public:
         {
             push_back(move(element));
         }
+        other.clear();
         return *this;
     }
 
@@ -171,6 +172,12 @@ public:
             ConstructDestruct::destruct(end() - 1U);
             --m_size;
         }
+    }
+
+    constexpr T&& extract_back() noexcept
+    {
+        --m_size;
+        return *end();
     }
 
     constexpr reference operator[](size_type const index)
