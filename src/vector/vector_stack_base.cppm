@@ -96,8 +96,9 @@ public:
     {
         for (auto it{other.begin()}; it != other.end(); ++it)
         {
-            *(begin()) = move(*it);
+            push_back(move(*it));
         }
+        other.clear();
     }
 
     /**
@@ -119,12 +120,41 @@ public:
     /// Move assignment
     constexpr vector_stack_base& operator=(vector_stack_base&& other) noexcept
     {
-        m_storage.swap(other.m_storage);
+        clear();
+        for(auto&& element : other)
+        {
+            push_back(move(element));
+        }
         return *this;
     }
 
     /// Destructor
     ~vector_stack_base() noexcept { clear(); }
+
+    bool operator==(vector_stack_base const& rhs) const noexcept
+    {
+        if (size() != rhs.size())
+        {
+            return false;
+        }
+
+        if (empty())
+        {
+            return true;
+        }
+
+        auto b{cbegin()};
+        auto b2{rhs.cbegin()};
+
+        while (b != cend())
+        {
+            if (!(*b++ == *b2++))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
 
     constexpr void clear() noexcept
     {
@@ -187,7 +217,7 @@ public:
                                                 (kElementSize * m_size));
     }
 
-    constexpr const_iterator cend() const noexcept { return m_storage.cend(); }
+    constexpr const_iterator cend() const noexcept { return end(); }
 
     constexpr T& back() noexcept
     {

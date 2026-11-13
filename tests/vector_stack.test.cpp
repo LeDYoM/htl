@@ -114,5 +114,141 @@ TEST_CASE("vector_stack::back() front()", "[vector_stack]")
 
 TEST_CASE("vector_stack::push and pop", "[vector_stack]")
 {
+    vector_stack<TestingDummy, 4> v;
+    CHECK(v.begin() == v.end());
 
+    CHECK(v.empty());
+    CHECK(v.size() == 0U);
+
+    v.push_back(TestingDummy{1, 2});
+    v.emplace_back(4, 5);
+    v.push_back(TestingDummy{6, 7});
+    v.emplace_back(8, 9);
+
+    CHECK(v.full());
+    CHECK(v.size() == 4U);
+
+    CHECK(v.back() == TestingDummy{8, 9});
+
+    v.pop_back();
+
+    CHECK_FALSE(v.full());
+    CHECK_FALSE(v.empty());
+    CHECK(v.size() == 3U);
+
+    CHECK(v.back() == TestingDummy{6, 7});
+
+    v.pop_back();
+
+    CHECK_FALSE(v.full());
+    CHECK_FALSE(v.empty());
+    CHECK(v.size() == 2U);
+
+    CHECK(v.back() == TestingDummy{4, 5});
+
+    v.pop_back();
+
+    CHECK_FALSE(v.full());
+    CHECK_FALSE(v.empty());
+    CHECK(v.size() == 1U);
+
+    CHECK(v.back() == TestingDummy{1, 2});
+
+    v.pop_back();
+
+    CHECK_FALSE(v.full());
+    CHECK(v.empty());
+    CHECK(v.size() == 0U);
+
+    CHECK(v.begin() == v.end());
+}
+
+TEST_CASE("vector_stack::comparison_operators", "[vector_stack]")
+{
+    vector_stack<TestingDummy, 4> v;
+    vector_stack<TestingDummy, 4> v2;
+
+    v.push_back(TestingDummy{55, 987});
+    v2.emplace_back(56, 987);
+
+    v.pop_back();
+    v2.pop_back();
+
+    CHECK(v == v2);
+}
+
+TEST_CASE("vector_stack::comparison operators", "[vector_stack]")
+{
+    vector_stack<TestingDummy, 4> v;
+    vector_stack<TestingDummy, 4> v2;
+
+    CHECK(v == v2);
+
+    v.push_back(TestingDummy{56, 987});
+    CHECK(v != v2);
+    v2.emplace_back(56, 987);
+
+    CHECK(v == v2);
+    v.emplace_back(567567, 10000);
+    CHECK(v != v2);
+
+    v2.push_back(TestingDummy{567568, 10000});
+    CHECK(v != v2);
+
+    v2.pop_back();
+    v2.push_back(TestingDummy{567567, 10000});
+
+    CHECK(v2 == v);
+
+    v.pop_back();
+    CHECK_FALSE(v2 == v);
+    v.push_back(TestingDummy{567568, 10000});
+    CHECK_FALSE(v2 == v);
+
+    v.clear();
+    v2.clear();
+
+    CHECK(v.size() == 0U);
+    CHECK(v2.size() == 0U);
+    CHECK(v == v2);
+}
+
+TEST_CASE("vector_stack::moving", "[vector_stack]")
+{
+    SECTION("With shared ptrs")
+    {
+        SECTION("Move constructor")
+        {
+            vector_stack<sptr<s32>, 5> v{msptr<s32>(-2), msptr<s32>(-1),
+                                         msptr<s32>(0), msptr<s32>(1),
+                                         msptr<s32>(2)};
+
+            CHECK(v.size() == 5);
+            CHECK(v.full());
+
+            vector_stack<sptr<s32>, 5> v2{move(v)};
+
+            CHECK(v2.size() == 5);
+            CHECK(v2.full());
+            CHECK(v.empty());
+        }
+
+        SECTION("Move assignment")
+        {
+            vector_stack<sptr<s32>, 5> v{msptr<s32>(-2), msptr<s32>(-1),
+                                         msptr<s32>(0), msptr<s32>(1),
+                                         msptr<s32>(2)};
+
+            CHECK(v.size() == 5);
+            CHECK(v.full());
+
+            vector_stack<sptr<s32>, 5> v2{msptr<s32>(50)};
+            CHECK(v2.size() == 1U);
+            v2 = move(v);
+
+            CHECK(v2.size() == 5);
+            CHECK(v2.full());
+            CHECK(v.empty());
+        }
+    }
 }
