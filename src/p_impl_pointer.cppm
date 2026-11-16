@@ -9,7 +9,7 @@ class PImplPointer final
 {
 public:
     explicit constexpr PImplPointer(rptr<T> pointer) noexcept :
-        pointer_{pointer}
+        m_pointer{pointer}
     {}
 
     PImplPointer(PImplPointer const&) = delete;
@@ -28,41 +28,41 @@ public:
     PImplPointer& operator=(PImplPointer<Y>&&) = delete;
 
     constexpr PImplPointer(PImplPointer&& other) noexcept :
-        pointer_{other.pointer_}
+        m_pointer{other.m_pointer}
     {
-        other.pointer_ = nullptr;
+        other.m_pointer = nullptr;
     }
 
     constexpr PImplPointer& operator=(PImplPointer&& other) noexcept
     {
-        auto tmp{pointer_};
-        pointer_       = other.pointer_;
-        other.pointer_ = move(tmp);
+        auto tmp{m_pointer};
+        m_pointer       = other.m_pointer;
+        other.m_pointer = move(tmp);
         return *this;
     }
 
-    constexpr T* operator->() noexcept { return pointer_; }
-    constexpr T const* operator->() const noexcept { return pointer_; }
+    constexpr T* operator->() noexcept { return m_pointer; }
+    constexpr T const* operator->() const noexcept { return m_pointer; }
 
-    constexpr T* get() noexcept { return pointer_; }
-    constexpr T const* get() const noexcept { return pointer_; }
+    constexpr T* get() noexcept { return m_pointer; }
+    constexpr T const* get() const noexcept { return m_pointer; }
 
-    constexpr T& operator*() noexcept { return *pointer_; }
-    constexpr T const& operator*() const noexcept { return *pointer_; }
+    constexpr T& operator*() noexcept { return *m_pointer; }
+    constexpr T const& operator*() const noexcept { return *m_pointer; }
 
     constexpr bool operator==(PImplPointer const&) const noexcept = default;
 
     ~PImplPointer() noexcept
     {
-        if (pointer_ != nullptr)
+        if (m_pointer != nullptr)
         {
-            delete pointer_;
-            pointer_ = nullptr;
+            delete m_pointer;
+            m_pointer = nullptr;
         }
     }
 
 private:
-    rptr<T> pointer_;
+    rptr<T> m_pointer;
 };
 
 export template <typename T, typename... Args>

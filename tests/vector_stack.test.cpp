@@ -290,7 +290,8 @@ TEST_CASE("vector_stack::moving", "[vector_stack]")
             CHECK(v.size() == 5);
             CHECK(v.full());
 
-            vector_stack<uptr<s32>, 5> v2{muptr<s32>(50)};
+            vector_stack<uptr<s32>, 5> v2;
+            v2.emplace_back(muptr<s32>(50));
             CHECK(v2.size() == 1U);
             v2 = move(v);
 

@@ -44,14 +44,24 @@ public:
     RawMemory(RawMemory&&) noexcept            = default;
     RawMemory& operator=(RawMemory&&) noexcept = default;
 
-    [[nodiscard]] inner_type const* cbegin() const noexcept { return m_data.cbegin(); }
-    [[nodiscard]] inner_type const* cend() const noexcept { return m_data.cend(); }
+    [[nodiscard]] inner_type const* cbegin() const noexcept
+    {
+        return m_data.cbegin();
+    }
+
+    [[nodiscard]] inner_type const* cend() const noexcept
+    {
+        return m_data.cend();
+    }
 
     [[nodiscard]] size_type size() const noexcept { return m_data.size(); }
 
     [[nodiscard]] bool empty() const noexcept { return m_data.empty(); }
 
-    [[nodiscard]] inner_type const* data() const noexcept { return m_data.cbegin(); }
+    [[nodiscard]] inner_type const* data() const noexcept
+    {
+        return m_data.cbegin();
+    }
 
     [[nodiscard]] str to_str() const
     {

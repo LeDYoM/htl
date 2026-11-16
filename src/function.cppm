@@ -114,7 +114,7 @@ private:
     class ICallable
     {
     public:
-        virtual ~ICallable() = default;
+        virtual ~ICallable()                                 = default;
         virtual ReturnValue Invoke(Args...)                  = 0;
         virtual bool equals(ICallable const&) const noexcept = 0;
     };

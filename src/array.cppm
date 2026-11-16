@@ -27,20 +27,37 @@ public:
     using const_iterator   = const T*;
     using reference        = T&;
     using const_reference  = const T&;
+    using rvalue_reference = T&&;
     using size_t           = size_type;
     using value_type       = T;
     using const_value_type = T const;
 
-    constexpr array() = default;
+    /**
+     * @brief Default constructor
+     * Default initializes all elements
+     */
+    constexpr array() noexcept(noexcept(
+        std::is_nothrow_default_constructible_v<value_type>)) = default;
 
-    constexpr array(std::initializer_list<value_type> iList) noexcept
+    /**
+     * @brief Initialize from an initializer_list<value_type>
+     * This constructor copies the data from the initializer_list parameter
+     * into the array buffer.
+     * If the iList size if less than the size of the array, the missing
+     * elements will be filled with the last element of the argument list.
+     * @param iList [in] The source list
+     * @note std::initializer_list is an inmutable class, nothing will be
+     * move from it
+     */
+    constexpr array(std::initializer_list<value_type> iList) noexcept(
+        noexcept(std::is_nothrow_copy_assignable_v<value_type>))
     {
-        auto buffer_element{&buffer_[0]};
+        auto buffer_element{&m_buffer[0]};
 
         // Copy everything from initializer list
         for (auto&& element : iList)
         {
-            (*buffer_element++) = move(element);
+            (*buffer_element++) = element;
         }
 
         // If after copying from initializer list there are still free places,
@@ -48,15 +65,17 @@ public:
         if (iList.size() < array_size && !iList.empty())
         {
             size_t counter{iList.size()};
-            buffer_element = &buffer_[counter];
+            buffer_element = &m_buffer[counter];
             while (counter++ < array_size)
             {
-                (*buffer_element++) = buffer_[iList.size() - 1U];
+                (*buffer_element++) = m_buffer[iList.size() - 1U];
             }
         }
     }
 
-    constexpr array(const T* const source, const size_type count) : array{}
+    constexpr array(const T* const source, const size_type count) noexcept(
+        noexcept(std::is_nothrow_copy_assignable_v<value_type>)) :
+        array{}
     {
         assert(array_size >= count);
         size_type index{0U};
@@ -64,11 +83,13 @@ public:
         auto const iterator_end{source + count};
         for (auto iterator{source}; iterator != iterator_end; ++iterator)
         {
-            buffer_[index++] = *iterator;
+            m_buffer[index++] = *iterator;
         }
     }
 
-    constexpr array(const_iterator const _begin, const_iterator const _end) :
+    constexpr array(const_iterator const _begin,
+                    const_iterator const _end) noexcept(noexcept(array{
+        _begin, static_cast<size_type>(std::distance(_begin, _end))})) :
         array{_begin, static_cast<size_type>(std::distance(_begin, _end))}
     {}
 
@@ -77,64 +98,65 @@ public:
 
     constexpr array(span<T> const rhs) : array{rhs.cbegin(), rhs.cend()} {}
 
-    constexpr void insert(size_type const index, value_type element) noexcept
+    constexpr void insert(size_type const index, value_type&& element) noexcept
     {
         if (index < array_size)
         {
             for (size_type i{array_size - 2U};
                  i >= index && (i < static_cast<size_type>(-1)); --i)
             {
-                buffer_[i + 1] = move(buffer_[i]);
+                m_buffer[i + 1] = move(m_buffer[i]);
             }
-            buffer_[index] = move(element);
+            m_buffer[index] = move(element);
         }
     }
 
     constexpr reference operator[](size_t const index) noexcept
     {
-        return buffer_[index];
+        return m_buffer[index];
     }
 
     constexpr const_reference operator[](const size_t index) const noexcept
     {
-        return buffer_[index];
+        return m_buffer[index];
     }
 
     [[nodiscard]] constexpr size_t size() const noexcept { return array_size; }
 
-    [[nodiscard]] constexpr bool empty() const noexcept { return array_size == 0U; }
+    [[nodiscard]] constexpr bool empty() const noexcept
+    {
+        return array_size == 0U;
+    }
 
-    [[nodiscard]] constexpr iterator begin() noexcept { return buffer_; }
+    [[nodiscard]] constexpr iterator begin() noexcept { return m_buffer; }
 
     [[nodiscard]] constexpr const_iterator begin() const noexcept
     {
-        return buffer_;
+        return m_buffer;
     }
 
     [[nodiscard]] constexpr iterator end() noexcept
     {
-        return buffer_ + array_size;
+        return m_buffer + array_size;
     }
     [[nodiscard]] constexpr const_iterator end() const noexcept
     {
-        return buffer_ + array_size;
+        return m_buffer + array_size;
     }
 
     [[nodiscard]] constexpr const_iterator cbegin() const noexcept
     {
         return begin();
-
     }
     [[nodiscard]] constexpr const_iterator cend() const noexcept
     {
         return end();
-
     }
     [[nodiscard]] constexpr reference front() noexcept { return *begin(); }
 
     [[nodiscard]] constexpr reference back() noexcept
     {
-        return buffer_[array_size - 1U];
+        return m_buffer[array_size - 1U];
     }
 
     [[nodiscard]] constexpr const_reference front() const noexcept
@@ -144,7 +166,7 @@ public:
 
     [[nodiscard]] constexpr const_reference back() const noexcept
     {
-        return buffer_[array_size - 1U];
+        return m_buffer[array_size - 1U];
     }
 
     [[nodiscard]] constexpr const_reference cfront() const noexcept
@@ -175,7 +197,7 @@ public:
     }
 
 private:
-    T buffer_[array_size];
+    T m_buffer[array_size];
 };
 
 export template <typename T, size_type S>
@@ -188,9 +210,8 @@ export template <typename T, size_type S>
 using array_weak_pointers = array<wptr<T>, S>;
 
 export template <typename Tp, typename... Up>
-array(Tp, Up...)
-    -> array<std::enable_if_t<(std::is_same_v<Tp, Up> && ...), Tp>,
-             1 + sizeof...(Up)>;
+array(Tp, Up...) -> array<std::enable_if_t<(std::is_same_v<Tp, Up> && ...), Tp>,
+                          1 + sizeof...(Up)>;
 
 export template <typename T>
 array(T) -> array<T, 1U>;
