@@ -129,14 +129,23 @@ public:
         return *this;
     }
 
-    /// Move assignment
+    /**
+     * @brief Move operator
+     * Moves another vector_base in this object
+     * @param other The object to be move. After this call, will contain this
+     * object
+     * @return This object
+     */
     constexpr vector_base& operator=(vector_base&& other) noexcept
     {
         m_storage.swap(other.m_storage);
         return *this;
     }
 
-    /// Destructor.
+    /**
+     * Destructor.
+     * Destructs the object clearing it.
+     */
     ~vector_base() noexcept { clear(); }
 
     constexpr reference operator[](const size_type index)
