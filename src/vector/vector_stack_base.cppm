@@ -9,7 +9,7 @@ import :btypes;
 
 namespace htps
 {
-export template <typename T, size_type N, typename ConstructDestruct>
+export template <typename T, size_type N, typename ConstrucortDestructor>
 class vector_stack_base final
 {
     static constexpr size_type kElementSize{alignof(T) > sizeof(T) ? alignof(T)
@@ -121,7 +121,7 @@ public:
     constexpr vector_stack_base& operator=(vector_stack_base&& other) noexcept
     {
         clear();
-        for(auto&& element : other)
+        for (auto&& element : other)
         {
             push_back(move(element));
         }
@@ -169,7 +169,7 @@ public:
     {
         if (m_size > 0U)
         {
-            ConstructDestruct::destruct(end() - 1U);
+            ConstrucortDestructor::destruct(end() - 1U);
             --m_size;
         }
     }
@@ -183,7 +183,8 @@ public:
     constexpr reference operator[](size_type const index)
     {
         assert(index < size());
-        return reinterpret_cast<reference>(*(&(m_storage[kElementSize * index])));
+        return reinterpret_cast<reference>(
+            *(&(m_storage[kElementSize * index])));
     }
 
     constexpr const_reference operator[](const size_type index) const
@@ -264,20 +265,20 @@ public:
 
     constexpr void push_back(const T& value)
     {
-        ConstructDestruct::construct(end(), value);
+        ConstrucortDestructor::construct(end(), value);
         ++m_size;
     }
 
     constexpr void push_back(T&& value)
     {
-        ConstructDestruct::construct(end(), move(value));
+        ConstrucortDestructor::construct(end(), move(value));
         ++m_size;
     }
 
     template <typename... Args>
     constexpr void emplace_back(Args&&... args)
     {
-        ConstructDestruct::construct(end(), forward<Args>(args)...);
+        ConstrucortDestructor::construct(end(), forward<Args>(args)...);
         ++m_size;
     }
 };
