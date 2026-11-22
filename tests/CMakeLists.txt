@@ -12,6 +12,7 @@ set(SOURCE_TESTS
 #    dictionary
 #    function
 #    hash
+    list
 #    lockable_vector
 #    menum
 #    pair
@@ -32,5 +33,8 @@ add_test_executable(${target} SOURCE_TESTS ${SOURCE_TESTS})
 target_link_libraries(${target} PRIVATE htl)
 
 if(MSVC)
-  target_compile_options(${target} PRIVATE "/wd4868;")
+  target_compile_options(${target} PRIVATE
+    "/wd4324;" # structure was padded due to alignment specifier
+    "/wd4868;"
+   )
 endif()

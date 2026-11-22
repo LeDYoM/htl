@@ -79,7 +79,7 @@ TEST_CASE("vector_stack::vector_stack std::initializer_list constructor",
 
 namespace
 {
-struct TestingDummy
+struct alignas(std::max_align_t) TestingDummy
 {
     int a;
     int b;
@@ -299,5 +299,26 @@ TEST_CASE("vector_stack::moving", "[vector_stack]")
             CHECK(v2.full());
             CHECK(v.empty());
         }
+    }
+}
+
+struct Char1
+{
+    char a;
+};
+
+constexpr u32 kAlignment{1024};
+
+struct alignas(kAlignment) Char1_kAlignment
+{};
+
+struct alignas(std::max_align_t) Char1_MaxAlign
+{};
+
+TEST_CASE("vector_stack::overalignment", "[vector_stack]")
+{
+    if constexpr (sizeof(Char1_kAlignment) == kAlignment)
+    {
+        vector_stack<Char1_kAlignment,2Y> data;
     }
 }

@@ -44,6 +44,7 @@ target_sources(${target} PRIVATE FILE_SET CXX_MODULES FILES
   src/array.cppm
   src/algos.cppm
   src/basic_dictionary.cppm
+  src/basic_list.cppm
   src/basic_str.cppm
   src/basic_types.cppm
   src/cast.cppm
@@ -52,6 +53,7 @@ target_sources(${target} PRIVATE FILE_SET CXX_MODULES FILES
   src/hash_table.cppm
   src/hash.cppm
   src/htypes.cppm
+  src/list.cppm
   src/lockable_vector.cppm
   src/menum.cppm
   src/p_impl_pointer.cppm
@@ -67,10 +69,10 @@ target_sources(${target} PRIVATE FILE_SET CXX_MODULES FILES
 
 if(MSVC)
   target_compile_options(${target} INTERFACE
+    "/wd4514;"  # Unused functions
     "/wd4625;"  # Copy constructor implicitly generated
     "/wd4626;"  # Copy assignment implicitly generated
     "/wd5045;"  # Compiler will insert Spectre mitigation for memory load
-    "/wd4514;"  # Unused functions
     "/wd4820;"  # Padding bytes
     )
 
