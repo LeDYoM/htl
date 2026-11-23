@@ -319,6 +319,6 @@ TEST_CASE("vector_stack::overalignment", "[vector_stack]")
 {
     if constexpr (sizeof(Char1_kAlignment) == kAlignment)
     {
-        vector_stack<Char1_kAlignment,2Y> data;
+        vector_stack<Char1_kAlignment,2> data;
     }
 }
