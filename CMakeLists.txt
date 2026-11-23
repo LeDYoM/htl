@@ -44,7 +44,7 @@ target_sources(${target} PRIVATE FILE_SET CXX_MODULES FILES
   src/array.cppm
   src/algos.cppm
   src/basic_dictionary.cppm
-  src/basic_intrusive_list.cppm
+  src/basic_list_intrusive.cppm
   src/basic_list.cppm
   src/basic_str.cppm
   src/basic_types.cppm

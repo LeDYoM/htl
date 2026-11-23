@@ -12,6 +12,7 @@ set(SOURCE_TESTS
 #    dictionary
 #    function
 #    hash
+    list_intrusive
     list
 #    lockable_vector
 #    menum
