@@ -281,6 +281,17 @@ public:
         ConstrucortDestructor::construct(end(), forward<Args>(args)...);
         ++m_size;
     }
+
+    static constexpr auto element_size() noexcept
+    {
+        return kElementSize;
+    }
+
+    static constexpr size_type element_offset(size_type const index) noexcept
+    {
+        return kElementSize * index;
+    }
+
 };
 
 }  // namespace htps

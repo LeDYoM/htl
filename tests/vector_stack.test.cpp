@@ -305,20 +305,89 @@ TEST_CASE("vector_stack::moving", "[vector_stack]")
 struct Char1
 {
     char a;
+    bool operator==(Char1 const&) const noexcept = default;
 };
 
 constexpr u32 kAlignment{1024};
 
 struct alignas(kAlignment) Char1_kAlignment
-{};
+{
+    char a;
+    bool operator==(Char1_kAlignment const&) const noexcept = default;
+};
 
 struct alignas(std::max_align_t) Char1_MaxAlign
-{};
+{
+    char a;
+    bool operator==(Char1_MaxAlign const&) const noexcept = default;
+};
 
 TEST_CASE("vector_stack::overalignment", "[vector_stack]")
 {
     if constexpr (sizeof(Char1_kAlignment) == kAlignment)
     {
-        vector_stack<Char1_kAlignment,2> data;
+        vector_stack<Char1_kAlignment, 2> data;
+
+        CHECK(data.element_size() == sizeof(Char1_kAlignment));
+        CHECK(data.element_offset(1U) == sizeof(Char1_kAlignment));
+
+        static_assert(vector_stack<Char1_kAlignment, 2>::element_size() ==
+                      sizeof(Char1_kAlignment));
+
+        static_assert(vector_stack<Char1_kAlignment, 2>::element_offset(1U) ==
+                      sizeof(Char1_kAlignment));
+
+        CHECK_FALSE(data.full());
+
+        data.push_back(Char1_kAlignment{5});
+        data.emplace_back((char)12);
+
+        CHECK(data[0].a == 5);
+        CHECK(data[1] == Char1_kAlignment{(char)12});
+        CHECK(data.full());
+    }
+
+    {
+        vector_stack<Char1_MaxAlign, 2> data;
+
+        CHECK(data.element_size() == sizeof(Char1_MaxAlign));
+        CHECK(data.element_offset(1U) == sizeof(Char1_MaxAlign));
+
+        static_assert(vector_stack<Char1_MaxAlign, 2>::element_size() ==
+                      sizeof(Char1_MaxAlign));
+
+        static_assert(vector_stack<Char1_MaxAlign, 2>::element_offset(1U) ==
+                      sizeof(Char1_MaxAlign));
+
+        CHECK_FALSE(data.full());
+
+        data.push_back(Char1_MaxAlign{7});
+        data.emplace_back((char)14);
+
+        CHECK(data[0].a == 7);
+        CHECK(data[1] == Char1_MaxAlign{(char)14});
+        CHECK(data.full());
+    }
+
+    {
+        vector_stack<Char1, 2> data;
+
+        CHECK(data.element_size() == sizeof(Char1));
+        CHECK(data.element_offset(1U) == sizeof(Char1));
+
+        static_assert(vector_stack<Char1, 2>::element_size() ==
+                      sizeof(Char1));
+
+        static_assert(vector_stack<Char1, 2>::element_offset(1U) ==
+                      sizeof(Char1));
+
+        CHECK_FALSE(data.full());
+
+        data.push_back(Char1{9});
+        data.emplace_back((char)16);
+
+        CHECK(data[0].a == 9);
+        CHECK(data[1] == Char1{(char)16});
+        CHECK(data.full());
     }
 }

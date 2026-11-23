@@ -30,7 +30,9 @@ public:
      */
     template <typename... Args>
     static constexpr void construct(pointer where, Args&&... args) noexcept(
-        noexcept(T(forward<Args>(args)...)))
+    //    noexcept(T(forward<Args>(args)...))
+    true
+    )
     {
         assert(where != nullptr);
 
