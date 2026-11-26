@@ -54,6 +54,7 @@ target_sources(${target} PRIVATE FILE_SET CXX_MODULES FILES
   src/hash_table.cppm
   src/hash.cppm
   src/htypes.cppm
+  src/list_intrusive.cppm
   src/list.cppm
   src/lockable_vector.cppm
   src/menum.cppm

@@ -4,13 +4,37 @@ import htypes;
 
 using namespace htps;
 
-TEST_CASE("BasicDictionary::BasicDictionary", "[htypes][basic_dictionry]")
+struct IntrusiveListElement
 {
-    BasicDictionary<int, int> testBasicDictionary;
-    CHECK(testBasicDictionary.add(0, 5, false));
-    CHECK(testBasicDictionary.find(0)->second == 5);
-    CHECK((*(testBasicDictionary.find_checked(0).second)).second == 5);
-    CHECK(testBasicDictionary.find_index(0).first == true);
-    CHECK(testBasicDictionary.find_index(0).second == 0);
-    CHECK(testBasicDictionary.find_index(1).first == false);
- }
+    IntrusiveListElement* prev;
+    IntrusiveListElement* next;
+    int data;
+
+    IntrusiveListElement(int _) : data{_} {}
+};
+
+TEST_CASE("list_intrusive::list_intrusive constructors",
+          "[htypes][list_intrusive]")
+{
+    list_intrusive<IntrusiveListElement> v;
+    CHECK(v.empty());
+    CHECK(v.size() == 0U);
+
+    v.push_back(1);
+    CHECK_FALSE(v.empty());
+    CHECK(v.size() == 1U);
+
+    int t = 2;
+    v.push_back(move(t));
+    CHECK_FALSE(v.empty());
+    CHECK(v.size() == 2U);
+
+    t = 3;
+    v.push_back(t);
+    CHECK_FALSE(v.empty());
+    CHECK(v.size() == 3U);
+
+    v.emplace_back(4);
+    CHECK_FALSE(v.empty());
+    CHECK(v.size() == 4U);
+}

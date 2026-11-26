@@ -33,3 +33,4 @@ export import :vector_stack;
 export import :vector_storage;
 export import :vector;
 export import :weak_ptr;
+export import :list_intrusive;

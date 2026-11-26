@@ -7,6 +7,6 @@ namespace htps
 {
 export template <typename T,
           typename Allocator  = AllocatorType<T>>
-using list_intrusive = list_intrusive<T, Allocator>;
+using list_intrusive = basic_list_intrusive<T, Allocator>;
 
 }  // namespace htps
