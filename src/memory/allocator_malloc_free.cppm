@@ -6,13 +6,10 @@ export module htypes:allocator_malloc_free;
 
 import :allocatorfunc;
 
-namespace
-{
 void free_with_size(void* block, std::size_t const)
 {
     std::free(block);
 }
-}  // namespace
 
 namespace htps
 {
