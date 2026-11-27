@@ -23,10 +23,15 @@
         },
         {
             "name": "clang-msvc-2026-x64",
-            "generator": "Visual Studio 18 2026",
-            "inherits": "clang-msvc-x64-base",
-            "architecture": "x64",
-            "toolset": "ClangCL"
+            "generator": "Ninja",
+            "inherits": "default",
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "clang-cl",
+                "CMAKE_CXX_COMPILER": "clang-cl"
+            },
+            "environment": {
+                "VSCMD_START_DIR": "${sourceDir}"
+            }
         },
         {
             "name": "win_vs_2022_x64",

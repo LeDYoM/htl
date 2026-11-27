@@ -88,3 +88,8 @@ endif()
 target_include_directories(${target} PUBLIC src)
 set_my_standards_cxx_options(${target} 23)
 add_subdirectory(tests)
+
+message(STATUS "Compiler: ${CMAKE_CXX_COMPILER}")
+message(STATUS "Compiler ID: ${CMAKE_CXX_COMPILER_ID}")
+message(STATUS "Compiler frontend variant: ${CMAKE_CXX_COMPILER_FRONTEND_VARIANT}")
+message(STATUS "Compiler version: ${CMAKE_CXX_COMPILER_VERSION}")

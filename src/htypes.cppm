@@ -1,8 +1,9 @@
 export module htypes;
 
-//export import :allocator_malloc_free;
-//export import :allocator;
-//export import :allocatorfunc;
+export import :allocator_malloc_free;
+export import :allocator;
+export import :allocatorfunc;
+export import :placement;
 
 export import :algos;
 export import :array;
